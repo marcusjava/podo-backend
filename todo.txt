@@ -1,0 +1,8 @@
+
+
+1 - Instalar dependencias necessarias - OK
+2 - Criar estrutura de pastas do projeto - OK
+3 - Criar o CRUD de Users -OK
+4 - Criar o CRUD de Clients - OK
+5 - Criar o CRUD de Services -OK
+6 - Criar o CRUD de Procedures - OK
