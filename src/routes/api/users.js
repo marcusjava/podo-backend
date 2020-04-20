@@ -31,6 +31,11 @@ routes.post('/login', UserController.login);
 // @access Private
 routes.put('/:id', passport.authenticate('jwt', { session: false }), upload.single('thumbnail'), UserController.update);
 
+// @route PUT api/users/:id/change_pwd
+// @desc Update user password
+// @access Private
+routes.put('/:id/change_pwd', passport.authenticate('jwt', { session: false }), UserController.changePwd);
+
 // @route GET api/users
 // @desc List user
 // @access Private

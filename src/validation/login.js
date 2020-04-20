@@ -4,11 +4,11 @@ const isEmpty = require('./is-empty');
 module.exports = data => {
 	let errors = {};
 
-	data.username = !isEmpty(data.name) ? data.name : '';
+	data.email = !isEmpty(data.email) ? data.email : '';
 	data.password = !isEmpty(data.password) ? data.password : '';
 
-	if (Validator.isEmpty(data.name)) {
-		errors.username = 'Usuario requerido';
+	if (Validator.isEmpty(data.email)) {
+		errors.username = 'Email requerido';
 	}
 
 	if (Validator.isEmpty(data.password)) {

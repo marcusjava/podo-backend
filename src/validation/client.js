@@ -26,6 +26,10 @@ module.exports = data => {
 		errors.name = 'Informe o nome';
 	}
 
+	if (Validator.isEmpty(data.contact)) {
+		errors.name = 'Informe ao menos um contato';
+	}
+
 	return {
 		errors,
 		isValid: isEmpty(errors),

@@ -14,7 +14,7 @@ const ProcedureController = require('../../controllers/ProcedureController');
 routes.post(
 	'/',
 	passport.authenticate('jwt', { session: false }),
-	upload.array('thumbnails', 12),
+	upload.array('thumbnails', 5),
 	ProcedureController.create
 );
 
@@ -24,13 +24,23 @@ routes.post(
 routes.put(
 	'/:id',
 	passport.authenticate('jwt', { session: false }),
-	upload.array('thumbnails', 12),
+	upload.array('thumbnails', 5),
 	ProcedureController.update
 );
+
+// @route PUT api/procedures/:id
+// @desc Update Procedure
+// @access Private
+routes.put('/:id/photos', passport.authenticate('jwt', { session: false }), ProcedureController.deletePhoto);
 
 // @route GET api/procedures
 // @desc List Procedure
 // @access Private
 routes.get('/', passport.authenticate('jwt', { session: false }), ProcedureController.list);
+
+// @route GET api/procedures
+// @desc List Procedure by filter
+// @access Private
+routes.get('/search', passport.authenticate('jwt', { session: false }), ProcedureController.filter);
 
 module.exports = routes;

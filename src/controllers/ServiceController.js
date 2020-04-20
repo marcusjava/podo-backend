@@ -17,19 +17,20 @@ const create = async (req, res) => {
 		return res.status(400).json(errors);
 	}
 
-	let newService;
+	const newService = new Service({
+		description,
+		observations,
+		createdBy: req.user,
+	});
 
-	try {
-		newService = await Service.create({
-			description,
-			observations,
-			createdBy: req.user,
+	newService
+		.save()
+		.then(service => {
+			return res.status(201).json(service);
+		})
+		.catch(error => {
+			return res.status(400).json(error);
 		});
-	} catch (error) {
-		return res.status(400).json(error);
-	}
-
-	return res.status(201).json(newService);
 };
 
 const update = async (req, res) => {
@@ -45,26 +46,21 @@ const update = async (req, res) => {
 		return res.status(400).json({ error: 'Serviço não localizado' });
 	}
 
-	let updated;
-
-	try {
-		await service.updateOne(
-			{
-				description,
-				observations,
-				updatedBy: req.user,
-			},
-			{ new: true }
-		);
-	} catch (error) {
-		console.log(error);
-	}
-
-	return res.json(service);
+	Service.findByIdAndUpdate(
+		{ _id: id },
+		{
+			description,
+			observations,
+			updatedBy: req.user,
+		},
+		{ new: true }
+	)
+		.then(service => res.json(service))
+		.catch(error => res.json(error));
 };
 
 const list = async (req, res) => {
-	const list = await Service.find();
+	const list = await Service.find({}).sort({ createdAt: -1 });
 
 	return res.json(list);
 };

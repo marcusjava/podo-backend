@@ -1,4 +1,6 @@
 const Procedure = require('../models/Procedure');
+const fs = require('fs');
+const path = require('path');
 
 const create = async (req, res) => {
 	//const { errors, isValid} = ValidateProcedure(req.body)
@@ -40,23 +42,58 @@ const update = async (req, res) => {
 		return res.status(404).json({ error: 'Procedimento não localizado' });
 	}
 
-	let updated;
+	Procedure.findByIdAndUpdate(
+		{ _id: id },
+		{
+			photos: [...procedure.photos, ...req.files.map(thumbnail => thumbnail.filename)],
+			service,
+			name,
+			description,
+			updatedBy: req.user,
+		},
+		{ new: true }
+	)
+		.then(procedure => res.json(procedure))
+		.catch(error => res.status(400).json(error));
+};
 
-	try {
-		await procedure.update(
-			{ photos: req.files.map(thumbnail => thumbnail.filename), service, name, description, updatedBy: req.user },
-			{ new: true }
-		);
-	} catch (error) {
-		return res.status(400).json({ error });
+const filter = async (req, res) => {
+	const { search } = req.query;
+	procedures = await Procedure.find({ name: { $regex: search, $options: 'i' } });
+	return res.json(procedures);
+};
+
+const deletePhoto = async (req, res) => {
+	const { id } = req.params;
+
+	const { photo } = req.body;
+
+	const procedure = await Procedure.findById({ _id: id });
+
+	if (!procedure) {
+		return res.status(404).json({ error: 'Procedimento não localizado' });
 	}
 
-	return res.json(procedure);
+	Procedure.findByIdAndUpdate(
+		{ _id: id },
+		{
+			photos: procedure.photos.filter(p => p !== photo),
+			updatedBy: req.user,
+		},
+		{ new: true }
+	)
+		.then(procedure => {
+			fs.unlinkSync(path.resolve(__dirname, '..', '..', 'uploads', photo));
+			res.json(procedure);
+		})
+		.catch(error => res.status(400).json(error));
 };
 
 const list = async (req, res) => {
-	const list = await Procedure.find();
+	const list = await Procedure.find({})
+		.sort({ createdAt: -1 })
+		.limit(100);
 	return res.json(list);
 };
 
-module.exports = { create, update, list };
+module.exports = { create, update, list, deletePhoto, filter };

@@ -1,7 +1,4 @@
 const mongoose = require('mongoose');
-const Service = require('./Service');
-
-const User = require('./User');
 
 const mongooseHistory = require('mongoose-history');
 
@@ -16,7 +13,7 @@ const ProcedureSchema = mongoose.Schema(
 		],
 		service: {
 			type: mongoose.Types.ObjectId,
-			ref: Service,
+			ref: 'Service',
 			autopopulate: true,
 		},
 		name: {
@@ -29,12 +26,12 @@ const ProcedureSchema = mongoose.Schema(
 		},
 		createdBy: {
 			type: mongoose.Types.ObjectId,
-			ref: User,
+			ref: 'User',
 			autopopulate: true,
 		},
 		updatedBy: {
 			type: mongoose.Types.ObjectId,
-			ref: User,
+			ref: 'User',
 			autopopulate: true,
 		},
 	},
@@ -50,8 +47,13 @@ ProcedureSchema.plugin(mongooseHistory);
 
 ProcedureSchema.plugin(mongoose_populate);
 
-ProcedureSchema.virtual('photos_urls').get(function() {
-	return this.photos.map(photo => `http://localhost:3001/files/${photo}`);
+ProcedureSchema.virtual('photos_urls').get(function () {
+	return this.photos.map((photo) => `http://localhost:3001/files/${photo}`);
 });
+
+// FotoSchema.pre('remove', function() {
+// 	console.log('Pré remove fired!!!!!!', this.key);
+// 	return promisify(fs.unlink)(path.resolve(__dirname, '..', '..', 'uploads', this.key));
+// });
 
 module.exports = mongoose.model('Procedure', ProcedureSchema);

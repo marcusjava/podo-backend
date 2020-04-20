@@ -33,4 +33,9 @@ routes.put(
 // @access Private
 routes.get('/', passport.authenticate('jwt', { session: false }), ClientController.list);
 
+// @route GET api/clients
+// @desc GET Client by ID
+// @access Private
+routes.get('/:id', passport.authenticate('jwt', { session: false }), ClientController.retrieve);
+
 module.exports = routes;
