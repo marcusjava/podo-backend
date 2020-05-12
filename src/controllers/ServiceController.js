@@ -13,8 +13,7 @@ const create = async (req, res) => {
 	const service = await Service.findOne({ description });
 
 	if (service) {
-		errors.service = 'Serviço já cadastrado';
-		return res.status(400).json(errors);
+		return res.status(400).json({ path: 'description', message: 'Serviço já cadastrado' });
 	}
 
 	const newService = new Service({
@@ -25,10 +24,10 @@ const create = async (req, res) => {
 
 	newService
 		.save()
-		.then(service => {
+		.then((service) => {
 			return res.status(201).json(service);
 		})
-		.catch(error => {
+		.catch((error) => {
 			return res.status(400).json(error);
 		});
 };
@@ -55,8 +54,8 @@ const update = async (req, res) => {
 		},
 		{ new: true }
 	)
-		.then(service => res.json(service))
-		.catch(error => res.json(error));
+		.then((service) => res.json(service))
+		.catch((error) => res.json(error));
 };
 
 const list = async (req, res) => {

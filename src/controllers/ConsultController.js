@@ -1,10 +1,11 @@
 const Consult = require('../models/Consult');
-const Photo = require('../models/Photo');
-const stringToArray = require('../utils/StringToArray');
+const Client = require('../models/Client');
+const ConsultHistory = require('../models/ConsultHistory');
 
 //TODO
 // Ver filtro de uma consulta com mesmo paciente
 // no mesmo horario
+// DESCONSIDERAR SE A CONSULTA ESTIVER COM STATUS CANCELADA
 const create = async (req, res) => {
 	//const { errors, isValid} = ValidateConsult(req.body)
 	const { date, client, procedures, type_consult, observations, status } = req.body;
@@ -15,10 +16,8 @@ const create = async (req, res) => {
 		return res.status(400).json({ path: 'date', message: 'Já existe consulta marcada nesta data/hora' });
 	}
 
-	let newConsult;
-
 	try {
-		newConsult = await Consult.create({
+		const newConsult = await Consult.create({
 			date,
 			client,
 			procedures,
@@ -27,67 +26,49 @@ const create = async (req, res) => {
 			status,
 			createdBy: req.user,
 		});
+		return res.status(201).json(newConsult);
 	} catch (error) {
-		return res.json(error);
+		return res.json({ message: error });
 	}
-
-	return res.status(201).json(newConsult);
 };
 
-const photos = async (req, res) => {
-	const url = process.env.URL || 'http://localhost:3001';
-	const consult = await Consult.findById(req.params.id);
-	if (!consult) {
-		return res.status(404).json({ message: 'Consulta não localizada!' });
-	}
-	const photo = await Photo.create({
-		name: req.file.originalname,
-		size: req.file.size,
-		key: req.file.key,
-		url: `${url}/files/${req.file.key}`,
-	});
-	consult.photos.push(photo);
-	await consult.save();
-	return res.json(receita);
-};
-
-const delete_photo = async (req, res) => {
-	const { consult_id, photo_id } = req.params;
-
-	const consult = await Consult.findById(consult_id);
-	const photo = await Photo.findById(photo_id);
-	await photo.remove();
-	await consult.photos.pull(photo_id);
-	await consult.save();
-	return res.json(consult);
-};
+/**
+ *
+ * @param {id} req
+ * @param {*} res
+ *
+ * TODO
+ * - Verificar se ao atualizar a consulta SE NAO EXSITE UMA OUTRA NO MESMO HORARIO
+ */
 
 const update = async (req, res) => {
 	//const { errors, isValid} = ValidateConsult(req.body)
-	const { date, client, procedures, type_consult, anamnese, observations } = req.body;
+	const { date, client, procedures, type_consult, anamnese, observations, status } = req.body;
 	const { id } = req.params;
 
 	Consult.findByIdAndUpdate(
 		{ _id: id },
 		{
-			date,
-			client,
-			procedures,
-			type_consult,
-			anamnese,
-			observations,
+			date: date,
+			client: client,
+			procedures: procedures,
+			type_consult: type_consult,
+			anamnese: anamnese,
+			observations: observations,
+			status: status,
 			updatedBy: req.user,
 		},
-		{ new: true }
+		{ new: true, useFindAndModify: false }
 	)
-		.then((doc) => res.json(doc))
-		.catch((error) => res.json(error));
-};
-
-const filter = async (req, res) => {
-	const { search } = req.query;
-	consults = await Consult.find({ client: { name: { $regex: search, $options: 'i' } } });
-	return res.json(consults);
+		.then((doc) => {
+			if (!doc) {
+				return res.status(404).json({ message: 'Consulta não localizada' });
+			}
+			return res.json(doc);
+		})
+		.catch((error) => {
+			return res.status(400).json({ message: error });
+		});
 };
 
 const retrieve = async (req, res) => {
@@ -103,32 +84,67 @@ const retrieve = async (req, res) => {
 };
 
 const list = async (req, res) => {
-	const { dateI, dateF, status, client } = req.query;
+	const { start, end, status, client, client_id } = req.query;
 
 	let condition = {};
-	let consults = [];
+	let clients;
 
-	if (dateI !== undefined && dateF !== undefined) {
+	condition.date = {
+		$gte: new Date().setHours(00, 00, 00),
+	};
+
+	if (start !== undefined && end !== undefined) {
 		condition.date = {
-			$gte: new Date(new Date(dateI).setHours(00, 00, 00)),
-			$lte: new Date(new Date(dateF).setHours(23, 59, 59)),
+			$gte: new Date(new Date(start).setHours(00, 00, 00)),
+			$lte: new Date(new Date(end).setHours(23, 59, 59)),
 		};
 	}
 
-	// Consult.find(condition)
-	// 	.populate({ path: 'client', match: { name: { $regex: client } }, select: 'name' })
-	// 	.exec((error, consults) => {
-	// 		if (error) {
-	// 			return res.json(error);
-	// 		}
-	// 		return res.json(consults);
-	// 	});
-	try {
-		consults = await Consult.find(condition).sort({ date: -1 }).limit(200);
-	} catch (error) {
-		return res.json(error);
+	if (client !== undefined) {
+		clients = await Client.find({ name: { $regex: client, $options: 'i' } });
+		condition.client = { $in: clients };
 	}
-	return res.json(consults);
+	if (client_id !== undefined) {
+		console.log(client_id);
+		condition.client = { _id: client_id };
+	}
+
+	Consult.find(condition)
+		.sort({ date: 1 })
+		.limit(200)
+		.exec((error, consults) => {
+			if (error) {
+				return res.json({ message: error });
+			}
+			return res.json(consults);
+		});
 };
 
-module.exports = { create, update, retrieve, list, filter, photos, delete_photo };
+const log = async (req, res) => {
+	const { start, end } = req.query;
+	const { id } = req.params;
+	let condition = {};
+
+	if (start !== undefined && end !== undefined) {
+		condition.t = {
+			$gte: new Date(new Date(start).setHours(00, 00, 00)),
+			$lte: new Date(new Date(end).setHours(23, 59, 59)),
+		};
+	}
+
+	if (id !== undefined) {
+		condition.docId = id;
+	}
+
+	ConsultHistory.find(condition)
+		.sort({ t: 1 })
+		.limit(200)
+		.exec((error, logs) => {
+			if (error) {
+				return res.json({ message: error });
+			}
+			return res.json(logs);
+		});
+};
+
+module.exports = { create, update, retrieve, list, log };

@@ -19,37 +19,18 @@ routes.post('/', passport.authenticate('jwt', { session: false }), ConsultContro
 routes.put('/:id', passport.authenticate('jwt', { session: false }), ConsultController.update);
 
 // @route GET api/consults/:id
-// @desc Update Consult
+// @desc GET Consult
 // @access Private
 routes.get('/:id', passport.authenticate('jwt', { session: false }), ConsultController.retrieve);
 
-// @route PUT api/consults/:id
-// @desc Update Consult
-// @access Private
-routes.post(
-	'/:id/photos',
-	upload.single('photos'),
-	passport.authenticate('jwt', { session: false }),
-	ConsultController.photos
-);
-// @route PUT api/consults/:id
-// @desc Update Consult
-// @access Private
-routes.delete(
-	'/:consult_id/photos/:photo_id',
-	upload.array('photos', 10),
-	passport.authenticate('jwt', { session: false }),
-	ConsultController.photos
-);
-
-// @route GET api/procedures
-// @desc List Procedure
+// @route GET api/consults
+// @desc List Consult
 // @access Private
 routes.get('/', passport.authenticate('jwt', { session: false }), ConsultController.list);
 
-// @route GET api/procedures/?search
-// @desc List Procedure by filter
+// @route GET api/consults
+// @desc List Consult
 // @access Private
-routes.get('/search', passport.authenticate('jwt', { session: false }), ConsultController.filter);
+routes.get('/:id/logs', passport.authenticate('jwt', { session: false }), ConsultController.log);
 
 module.exports = routes;

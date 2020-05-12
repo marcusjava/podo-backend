@@ -30,7 +30,7 @@ const login = async (req, res) => {
 					avatar_url: `http://localhost:3001/files/${user.thumbnail}`,
 				};
 
-				jwt.sign(payload, secret, { expiresIn: 3600 }, (error, token) => {
+				jwt.sign(payload, secret, { expiresIn: '24h' }, (error, token) => {
 					res.json({ success: true, token: `Bearer ${token}` });
 				});
 			} else {
@@ -88,7 +88,7 @@ const register = async (req, res) => {
 					if (error.errors.email) {
 						res.status(400).json({ path: 'email', message: 'Email já cadastrado' });
 					}
-					res.status(400).json({ path: 'general', message: 'Ocorreu um error ao salvar o usuario' });
+					res.status(400).json({ message: 'Ocorreu um error ao salvar o usuario' });
 				});
 		});
 	});
@@ -129,7 +129,7 @@ const update = async (req, res) => {
 		{ new: true }
 	)
 		.then((user) => res.json(user))
-		.catch((error) => res.json(error));
+		.catch((error) => res.json({ message: error }));
 };
 
 const changePwd = async (req, res) => {
@@ -147,9 +147,7 @@ const changePwd = async (req, res) => {
 			if (error) throw error;
 			User.findByIdAndUpdate({ _id: id }, { password: hash }, { new: true })
 				.then((user) => res.json({ msg: 'Senha atualizada com sucesso' }))
-				.catch((error) =>
-					res.status(400).json({ path: 'general', message: 'Erro ao alterar a senha do usuario' })
-				);
+				.catch((error) => res.status(400).json({ message: 'Erro ao alterar a senha do usuario' }));
 		});
 	});
 };

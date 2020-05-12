@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const mongooseHistory = require('mongoose-history');
-const paginate = require('mongoose-paginate');
 const mongoose_populate = require('mongoose-autopopulate');
 const uniqueValidator = require('mongoose-unique-validator');
 
@@ -68,19 +67,10 @@ ClientSchema.virtual('insta_url').get(function () {
 	return `https://www.instagram.com/${this.instagram}`;
 });
 
-ClientSchema.virtual('consults', {
-	ref: 'Consult',
-	localField: '_id',
-	foreignField: 'client',
-	options: { sort: { date: -1 }, limit: 200 },
-});
-
 ClientSchema.plugin(mongooseHistory);
 
+ClientSchema.plugin(uniqueValidator, { '{PATH}': 'Erro, já existe {PATH} cadastrado no sistema.' });
+
 ClientSchema.plugin(mongoose_populate);
-
-ClientSchema.plugin(paginate);
-
-ClientSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model('Client', ClientSchema);

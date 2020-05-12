@@ -22,7 +22,6 @@ const ProcedureSchema = mongoose.Schema(
 		},
 		description: {
 			type: String,
-			required: true,
 		},
 		createdBy: {
 			type: mongoose.Types.ObjectId,

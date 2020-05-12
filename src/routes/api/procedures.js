@@ -38,9 +38,4 @@ routes.put('/:id/photos', passport.authenticate('jwt', { session: false }), Proc
 // @access Private
 routes.get('/', passport.authenticate('jwt', { session: false }), ProcedureController.list);
 
-// @route GET api/procedures
-// @desc List Procedure by filter
-// @access Private
-routes.get('/search', passport.authenticate('jwt', { session: false }), ProcedureController.filter);
-
 module.exports = routes;
