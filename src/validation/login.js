@@ -1,18 +1,18 @@
 const Validator = require('validator');
 const isEmpty = require('./is-empty');
 
-module.exports = data => {
+module.exports = (data) => {
 	let errors = {};
 
 	data.email = !isEmpty(data.email) ? data.email : '';
 	data.password = !isEmpty(data.password) ? data.password : '';
 
 	if (Validator.isEmpty(data.email)) {
-		errors.username = 'Email requerido';
+		errors = { path: 'email', message: 'Email obrigatorio' };
 	}
 
 	if (Validator.isEmpty(data.password)) {
-		errors.password = 'Senha requerida';
+		errors = { path: 'password', message: 'Senha obrigatoria' };
 	}
 
 	return {

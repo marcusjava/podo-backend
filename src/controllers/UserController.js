@@ -4,19 +4,29 @@ const ValidateRegister = require('../validation/registerUser');
 const UpdateRegister = require('../validation/updateUser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const secret = require('../config/keys_dev').secret;
 
-const login = async (req, res) => {
+/**
+ *
+ * Não permitir login para usuario inativo
+ *
+ *
+ */
+
+const login = async (req, res, next) => {
 	const { errors, isValid } = ValidateLogin(req.body);
 	if (!isValid) {
-		return res.status(400).json(errors);
+		return next({ status: 400, message: errors });
 	}
 	const { email, password } = req.body;
 	const user = await User.findOne({ email }).select('+password');
 
 	if (!user) {
-		errors.notfound = 'Usuario não encontrado';
-		return res.status(404).json(errors);
+		return next({ status: 404, message: { path: 'email', message: 'Usuario não encontrado' } });
+	}
+
+	//user inativo
+	if (user.status.value == 1) {
+		return next({ status: 400, message: { path: 'email', message: 'Usuario inativo' } });
 	}
 	bcrypt
 		.compare(password, user.password)
@@ -30,31 +40,37 @@ const login = async (req, res) => {
 					avatar_url: `http://localhost:3001/files/${user.thumbnail}`,
 				};
 
-				jwt.sign(payload, secret, { expiresIn: '24h' }, (error, token) => {
+				jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '24h' }, (error, token) => {
 					res.json({ success: true, token: `Bearer ${token}` });
 				});
 			} else {
-				errors.password = 'Senha não confere';
-				return res.json(400).json(errors);
+				return next({ status: 400, message: { path: 'password', message: 'Senha não confere' } });
 			}
 		})
-		.catch((error) => console.log(error));
+		.catch((error) => next({ status: 400, message: { path: 'general', message: error } }));
 };
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
 	const { errors, isValid } = ValidateRegister(req.body);
 
 	if (!isValid) {
-		return res.status(400).json(errors);
+		return next({ status: 400, message: { message: errors } });
 	}
 
 	const { name, phone, nasc, cpf, rg, email, address, password, status, role } = req.body;
 
-	const user = await User.findOne({ email });
+	const user = await User.findOne({ $or: [{ email }, { cpf }, { rg }] });
 
-	if (user) {
-		errors.email = 'Já existe um usuario com esse email';
-		return res.status(400).json(errors);
+	if (user && user.email == email) {
+		return next({ status: 400, message: { path: 'email', message: 'Já existe um usuario com esse email' } });
+	}
+
+	if (user && user.cpf == cpf) {
+		return next({ status: 400, message: { path: 'cpf', message: 'Já existe um usuario com esse CPF' } });
+	}
+
+	if (user && user.rg == rg) {
+		return next({ status: 400, message: { path: 'rg', message: 'Já existe um usuario com esse RG' } });
 	}
 
 	const newUser = new User({
@@ -71,11 +87,16 @@ const register = async (req, res) => {
 		role: JSON.parse(role),
 		status: JSON.parse(status),
 	});
-
-	console.log(newUser);
 	bcrypt.genSalt(10, (error, salt) => {
 		bcrypt.hash(newUser.password, salt, (error, hash) => {
-			if (error) throw error;
+			if (error)
+				next({
+					status: 500,
+					message: {
+						path: 'password',
+						message: 'Ocorreu um erro ao tentar criar o hash da senha do usuario',
+					},
+				});
 
 			newUser.password = hash;
 			newUser
@@ -83,23 +104,26 @@ const register = async (req, res) => {
 				.then((user) => res.status(201).send({ msg: 'Usuario salvo com sucesso' }))
 				.catch((error) => {
 					if (error.errors.cpf) {
-						res.status(400).json({ path: 'cpf', message: 'CPF já cadastrado' });
+						return next({ status: 400, message: { path: 'cpf', message: 'CPF já cadastrado' } });
 					}
 					if (error.errors.email) {
-						res.status(400).json({ path: 'email', message: 'Email já cadastrado' });
+						return next({ status: 400, message: { path: 'email', message: 'Email já cadastrado' } });
 					}
-					res.status(400).json({ message: 'Ocorreu um error ao salvar o usuario' });
+					return next({
+						status: 400,
+						message: { path: 'general', message: 'Ocorreu um erro ao salvar o usuario' + error },
+					});
 				});
 		});
 	});
 };
 
 //TODO - Change password
-const update = async (req, res) => {
+const update = async (req, res, next) => {
 	const { errors, isValid } = UpdateRegister(req.body);
 
 	if (!isValid) {
-		return res.status(400).json(errors);
+		return next({ status: 400, message: errors });
 	}
 	const { id } = req.params;
 
@@ -108,7 +132,7 @@ const update = async (req, res) => {
 	const user = await User.findById({ _id: id });
 
 	if (!user) {
-		return res.status(400).json({ errors: 'Usuario não encontrado' });
+		return next({ status: 404, message: { path: 'user', message: 'Usuario não encontrado' } });
 	}
 
 	User.findByIdAndUpdate(
@@ -129,17 +153,15 @@ const update = async (req, res) => {
 		{ new: true }
 	)
 		.then((user) => res.json(user))
-		.catch((error) => res.json({ message: error }));
+		.catch((error) => next({ status: 400, message: error }));
 };
 
-const changePwd = async (req, res) => {
-	const errors = {};
+const changePwd = async (req, res, next) => {
 	const { password, password2 } = req.body;
 	const { id } = req.params;
 
 	if (password != password2) {
-		errors.password = 'Senhas não conferem';
-		return res.status(400).json(errors);
+		return next({ status: 400, message: { path: 'password', message: 'Senhas não conferem' } });
 	}
 
 	bcrypt.genSalt(10, (error, salt) => {
@@ -147,7 +169,12 @@ const changePwd = async (req, res) => {
 			if (error) throw error;
 			User.findByIdAndUpdate({ _id: id }, { password: hash }, { new: true })
 				.then((user) => res.json({ msg: 'Senha atualizada com sucesso' }))
-				.catch((error) => res.status(400).json({ message: 'Erro ao alterar a senha do usuario' }));
+				.catch((error) =>
+					next({
+						status: 400,
+						message: { path: 'password', message: 'Erro ao tentar alterar a senha' },
+					})
+				);
 		});
 	});
 };

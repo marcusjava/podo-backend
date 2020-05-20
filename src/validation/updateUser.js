@@ -2,7 +2,7 @@ const Validator = require('validator');
 const isEmpty = require('./is-empty');
 const isArray = require('./is-array');
 
-module.exports = data => {
+module.exports = (data) => {
 	let errors = {};
 
 	data.name = !isEmpty(data.name) ? data.name : '';
@@ -11,23 +11,23 @@ module.exports = data => {
 	data.role = !isEmpty(data.role) ? data.role : [];
 
 	if (!Validator.isLength(data.name, { min: 2, max: 30 })) {
-		errors.name = 'Nome do usuario precisa ser entre 2 e 30 caracteres';
+		errors = { path: 'name', message: 'Nome do usuario precisa ser entre 2 e 30 caracteres' };
 	}
 
 	if (Validator.isEmpty(data.name)) {
-		errors.name = 'Informe o nome';
+		errors = { path: 'name', message: 'Informe o nome' };
 	}
 
 	if (Validator.isEmpty(data.cpf)) {
-		errors.cpf = 'Informe o cpf do usuario';
+		errors = { path: 'cpf', message: 'Informe o cpf' };
 	}
 
 	if (isArray(data.role)) {
-		errors.role = 'Informe ao menos uma regra para este usuario';
+		errors = { path: 'role', message: 'Informe ao menos uma regra para este usuario' };
 	}
 
 	if (!Validator.isEmail(data.email)) {
-		errors.email = 'Email incorreto';
+		errors = { path: 'email', message: 'Email incorreto' };
 	}
 
 	return {

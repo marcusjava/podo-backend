@@ -6,14 +6,14 @@ const ConsultHistory = require('../models/ConsultHistory');
 // Ver filtro de uma consulta com mesmo paciente
 // no mesmo horario
 // DESCONSIDERAR SE A CONSULTA ESTIVER COM STATUS CANCELADA
-const create = async (req, res) => {
+const create = async (req, res, next) => {
 	//const { errors, isValid} = ValidateConsult(req.body)
 	const { date, client, procedures, type_consult, observations, status } = req.body;
 
 	let consult = await Consult.findOne({ date });
 
 	if (consult) {
-		return res.status(400).json({ path: 'date', message: 'Já existe consulta marcada nesta data/hora' });
+		return next({ status: 400, message: { path: 'date', message: 'Já existe consulta marcada nesta data/hora' } });
 	}
 
 	try {
@@ -28,7 +28,7 @@ const create = async (req, res) => {
 		});
 		return res.status(201).json(newConsult);
 	} catch (error) {
-		return res.json({ message: error });
+		return next({ status: 400, message: error });
 	}
 };
 
@@ -41,8 +41,7 @@ const create = async (req, res) => {
  * - Verificar se ao atualizar a consulta SE NAO EXSITE UMA OUTRA NO MESMO HORARIO
  */
 
-const update = async (req, res) => {
-	//const { errors, isValid} = ValidateConsult(req.body)
+const update = async (req, res, next) => {
 	const { date, client, procedures, type_consult, anamnese, observations, status } = req.body;
 	const { id } = req.params;
 
@@ -62,28 +61,28 @@ const update = async (req, res) => {
 	)
 		.then((doc) => {
 			if (!doc) {
-				return res.status(404).json({ message: 'Consulta não localizada' });
+				return next({ status: 404, message: { message: 'Consulta não localizada' } });
 			}
 			return res.json(doc);
 		})
 		.catch((error) => {
-			return res.status(400).json({ message: error });
+			return next({ status: 400, message: { message: error } });
 		});
 };
 
-const retrieve = async (req, res) => {
+const retrieve = async (req, res, next) => {
 	const { id } = req.params;
 
 	const consult = await Consult.findById(id);
 
 	if (!consult) {
-		return res.status(404).json('Consulta não localizada');
+		return next({ status: 404, message: { message: 'Consulta não localizada' } });
 	}
 
 	return res.json(consult);
 };
 
-const list = async (req, res) => {
+const list = async (req, res, next) => {
 	const { start, end, status, client, client_id } = req.query;
 
 	let condition = {};
@@ -114,13 +113,13 @@ const list = async (req, res) => {
 		.limit(200)
 		.exec((error, consults) => {
 			if (error) {
-				return res.json({ message: error });
+				return next({ status: 400, message: { message: error } });
 			}
 			return res.json(consults);
 		});
 };
 
-const log = async (req, res) => {
+const log = async (req, res, next) => {
 	const { start, end } = req.query;
 	const { id } = req.params;
 	let condition = {};
@@ -141,7 +140,7 @@ const log = async (req, res) => {
 		.limit(200)
 		.exec((error, logs) => {
 			if (error) {
-				return res.json({ message: error });
+				return next({ status: 400, message: { message: 'Erro ao recuperar os logs da consulta' } });
 			}
 			return res.json(logs);
 		});

@@ -1,7 +1,7 @@
 const Validator = require('validator');
 const isEmpty = require('./is-empty');
 
-module.exports = data => {
+module.exports = (data) => {
 	let errors = {};
 
 	data.name = !isEmpty(data.name) ? data.name : '';
@@ -19,15 +19,15 @@ module.exports = data => {
 	data.etnia = !isEmpty(data.etnia) ? data.etnia : '';
 
 	if (!Validator.isLength(data.name, { min: 2, max: 30 })) {
-		errors.name = 'Nome do cliente precisa ser entre 2 e 30 caracteres';
+		errors = { path: 'name', message: 'Nome do cliente precisa ser entre 2 e 30 caracteres' };
 	}
 
 	if (Validator.isEmpty(data.name)) {
-		errors.name = 'Informe o nome';
+		errors = { path: 'name', message: 'Informe o nome' };
 	}
 
 	if (Validator.isEmpty(data.contact)) {
-		errors.name = 'Informe ao menos um contato';
+		errors = { path: 'contact', message: 'Informe ao menos um contato' };
 	}
 
 	return {

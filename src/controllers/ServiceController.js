@@ -1,11 +1,11 @@
 const Service = require('../models/Service');
 const ValidateService = require('../validation/service');
 
-const create = async (req, res) => {
+const create = async (req, res, next) => {
 	const { errors, isValid } = ValidateService(req.body);
 
 	if (!isValid) {
-		return res.status(400).json(errors);
+		return next({ status: 400, message: errors });
 	}
 
 	const { description, observations } = req.body;
@@ -13,7 +13,7 @@ const create = async (req, res) => {
 	const service = await Service.findOne({ description });
 
 	if (service) {
-		return res.status(400).json({ path: 'description', message: 'Serviço já cadastrado' });
+		return next({ status: 404, message: { path: 'description', message: 'Serviço já cadastrado' } });
 	}
 
 	const newService = new Service({
@@ -28,11 +28,11 @@ const create = async (req, res) => {
 			return res.status(201).json(service);
 		})
 		.catch((error) => {
-			return res.status(400).json(error);
+			return next({ status: 400, message: error });
 		});
 };
 
-const update = async (req, res) => {
+const update = async (req, res, next) => {
 	//const { errors, isValid} = ValidateService(req.body)
 
 	const { description, observations } = req.body;
@@ -42,7 +42,7 @@ const update = async (req, res) => {
 	const service = await Service.findById({ _id: id });
 
 	if (!service) {
-		return res.status(400).json({ error: 'Serviço não localizado' });
+		return next({ status: 404, message: { path: 'description', message: 'Serviço não localizado' } });
 	}
 
 	Service.findByIdAndUpdate(
@@ -55,7 +55,7 @@ const update = async (req, res) => {
 		{ new: true }
 	)
 		.then((service) => res.json(service))
-		.catch((error) => res.json(error));
+		.catch((error) => next({ status: 400, message: { path: 'general', message: error } }));
 };
 
 const list = async (req, res) => {

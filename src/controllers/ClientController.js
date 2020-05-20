@@ -1,11 +1,11 @@
 const Client = require('../models/Client');
 const ValidateClient = require('../validation/client');
 
-const create = async (req, res) => {
+const create = async (req, res, next) => {
 	const { errors, isValid } = ValidateClient(req.body);
 
 	if (!isValid) {
-		return res.status(400).json(errors);
+		return next({ status: 400, message: errors });
 	}
 	const { name, instagram, cpf, rg, email, address, occupation, contact, nasc, sex, etnia } = req.body;
 
@@ -29,13 +29,20 @@ const create = async (req, res) => {
 		.save()
 		.then((response) => res.status(201).send('Cliente salvo com sucesso'))
 		.catch((error) => {
+			const err = new Error();
+
 			if (error.errors.cpf) {
-				res.status(400).json({ path: 'cpf', message: 'CPF já cadastrado' });
+				err.status = 400;
+				err.message = { path: 'cpf', message: 'CPF já cadastrado' };
+			} else if (error.errors.email) {
+				err.status = 400;
+				err.message = { path: 'email', message: 'Email já cadastrado' };
+			} else {
+				err.status = 400;
+				err.message = { path: 'general', message: 'Ocorreu um error ao salvar o usuario' };
 			}
-			if (error.errors.email) {
-				res.status(400).json({ path: 'email', message: 'Email já cadastrado' });
-			}
-			res.status(400).json({ message: 'Ocorreu um error ao salvar o usuario' });
+
+			return next(err);
 		});
 };
 
@@ -43,11 +50,11 @@ const create = async (req, res) => {
 // Update image client - OK
 // Pagination
 
-const update = async (req, res) => {
+const update = async (req, res, next) => {
 	const { errors, isValid } = ValidateClient(req.body);
 
 	if (!isValid) {
-		return res.status(400).json(errors);
+		return next({ status: 400, message: errors });
 	}
 
 	const { id } = req.params;
@@ -77,18 +84,17 @@ const update = async (req, res) => {
 			return res.json(doc);
 		})
 		.catch((error) => {
-			console.log(error);
-			return res.status(400).json(error);
+			return next(error);
 		});
 };
 
-const retrieve = async (req, res) => {
+const retrieve = async (req, res, next) => {
 	const { id } = req.params;
 
 	const client = await Client.findById(id);
 
 	if (!client) {
-		return res.status(404).json({ path: 'client', message: 'Cliente não localizado' });
+		return next({ status: 400, message: { path: 'client', message: 'Cliente não localizado' } });
 	}
 
 	return res.json(client);

@@ -2,15 +2,23 @@ const Procedure = require('../models/Procedure');
 const fs = require('fs');
 const path = require('path');
 
-const create = async (req, res) => {
+const create = async (req, res, next) => {
 	//const { errors, isValid} = ValidateProcedure(req.body)
 
 	const { service, name, description } = req.body;
 
+	if (!service) {
+		return next({ status: 400, message: { path: 'service', message: 'Campo serviço é obrigatorio' } });
+	}
+
+	if (!name) {
+		return next({ status: 400, message: { path: 'name', message: 'Campo nome é obrigatorio' } });
+	}
+
 	const procedure = await Procedure.findOne({ name });
 
 	if (procedure) {
-		return res.status(400).json({ error: 'Procedimento ja cadastrado' });
+		return next({ status: 400, message: { path: 'name', message: 'Procedimento ja cadastrado' } });
 	}
 
 	let newProcedure;
@@ -24,28 +32,30 @@ const create = async (req, res) => {
 			createdBy: req.user,
 		});
 	} catch (error) {
-		let errorMessages;
-		const { type, path } = error.errors.description.properties;
-		if (type === 'required' && path === 'description') {
-			errorMessages = { path: 'description', message: 'Campo descrição é obrigatorio' };
-		}
-
-		return res.status(400).json(errorMessages);
+		return next({ status: 400, message: error });
 	}
 
 	return res.status(201).json(newProcedure);
 };
 
-const update = async (req, res) => {
+const update = async (req, res, next) => {
 	//const { errors, isValid} = ValidateProcedure(req.body)
 
 	const { service, name, description } = req.body;
 	const { id } = req.params;
 
+	if (!service) {
+		return next({ status: 400, message: { path: 'service', message: 'Campo serviço é obrigatorio' } });
+	}
+
+	if (!name) {
+		return next({ status: 400, message: { path: 'name', message: 'Campo nome é obrigatorio' } });
+	}
+
 	Procedure.findById({ _id: id })
 		.then((doc) => {
 			if (!doc) {
-				return res.status(404).json({ message: 'Procedimento não localizado' });
+				return next({ status: 404, message: { path: 'procedure', message: 'Procedimento não localizado' } });
 			}
 			doc.photos = [...doc.photos, ...req.files.map((thumbnail) => thumbnail.filename)];
 			doc.service = service;
@@ -59,7 +69,7 @@ const update = async (req, res) => {
 		.catch((error) => res.status(400).json(error));
 };
 
-const deletePhoto = async (req, res) => {
+const deletePhoto = async (req, res, next) => {
 	const { id } = req.params;
 
 	const { photo } = req.body;
@@ -67,7 +77,7 @@ const deletePhoto = async (req, res) => {
 	const procedure = await Procedure.findById({ _id: id });
 
 	if (!procedure) {
-		return res.status(404).json({ error: 'Procedimento não localizado' });
+		return next({ status: 404, message: { path: 'procedure', message: 'Procedimento não localizado' } });
 	}
 
 	Procedure.findByIdAndUpdate(
@@ -82,7 +92,7 @@ const deletePhoto = async (req, res) => {
 			fs.unlinkSync(path.resolve(__dirname, '..', '..', 'uploads', photo));
 			res.json(procedure);
 		})
-		.catch((error) => res.status(400).json(error));
+		.catch((error) => next({ status: 400, message: { path: 'procedure', message: error } }));
 };
 
 const list = async (req, res) => {

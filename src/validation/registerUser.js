@@ -2,7 +2,7 @@ const Validator = require('validator');
 const isEmpty = require('./is-empty');
 const isArray = require('./is-array');
 
-module.exports = data => {
+module.exports = (data) => {
 	let errors = {};
 
 	const address = JSON.parse(data.address);
@@ -19,51 +19,51 @@ module.exports = data => {
 	data.password2 = !isEmpty(data.password2) ? data.password2 : '';
 
 	if (!Validator.isLength(data.name, { min: 2, max: 30 })) {
-		errors.name = 'Nome do usuario precisa ser entre 2 e 30 caracteres';
+		errors = { path: 'name', message: 'Nome do usuario precisa ser entre 2 e 30 caracteres' };
 	}
 
 	if (Validator.isEmpty(data.name)) {
-		errors.name = 'Informe o nome';
+		errors = { path: 'name', message: 'Informe o nome' };
 	}
 
 	if (Validator.isEmpty(data.cpf)) {
-		errors.cpf = 'Informe o cpf do usuario';
+		errors = { path: 'cpf', message: 'Informe o cpf do usuario' };
 	}
 
 	if (Validator.isEmpty(data.role)) {
-		errors.cpf = 'Informe o nivel de acesso do usuario';
+		errors = { path: 'role', message: 'Informe o nivel de acesso do usuario' };
 	}
 
 	if (Validator.isEmpty(address.street)) {
-		errors.address.street = 'Informe a rua';
+		errors = { path: 'address.street', message: 'Informe a Rua' };
 	}
 	if (Validator.isEmpty(address.neighborhood)) {
-		errors.address.street = 'Informe o Bairro';
+		errors = { path: 'address.neighborhood', message: 'Informe o Bairro' };
 	}
 
 	if (Validator.isEmpty(address.city)) {
-		errors.address.street = 'Informe a cidade';
+		errors = { path: 'address.city', message: 'Informe a Cidade' };
 	}
 
 	if (Validator.isEmpty(address.state)) {
-		errors.address.street = 'Informe o Estado';
+		errors = { path: 'address.state', message: 'Informe o Estado' };
 	}
 
 	if (Validator.isEmpty(data.password)) {
-		errors.password = 'Informe a senha';
+		errors = { path: 'password', message: 'Informe a senha' };
 	}
 
 	if (Validator.isEmpty(data.password2)) {
-		errors.password2 = 'Informe a confirmação de senha';
+		errors = { path: 'password2', message: 'Informe a confirmação de senha' };
 	}
 
 	if (!Validator.equals(data.password, data.password2)) {
-		errors.password = 'Senha e confirmação de senha não estão iguais';
-		errors.password2 = 'Senha e confirmação de senha não estão iguais';
+		errors = { path: 'password', message: 'Senha e confirmação de senha não estão iguais' };
+		errors = { path: 'password2', message: 'Senha e confirmação de senha não estão iguais' };
 	}
 
 	if (!Validator.isEmail(data.email)) {
-		errors.email = 'Email incorreto';
+		errors = { path: 'email', message: 'Email com formato incorreto' };
 	}
 
 	return {

@@ -1,7 +1,7 @@
 const Validator = require('validator');
 const isEmpty = require('./is-empty');
 
-module.exports = data => {
+module.exports = (data) => {
 	let errors = {};
 
 	data.service = !isEmpty(data.service) ? data.service : '';
@@ -9,15 +9,15 @@ module.exports = data => {
 	data.description = !isEmpty(data.description) ? data.description : '';
 
 	if (Validator.isEmpty(data.service)) {
-		errors.service = 'Informe o serviço';
+		errors = { path: 'service', message: 'Informe o serviço' };
 	}
 
 	if (Validator.isEmpty(data.name)) {
-		errors.name = 'Informe o nome do procedimento';
+		errors = { path: 'name', message: 'Informe o nome do procedimento' };
 	}
 
 	if (Validator.isEmpty(data.description)) {
-		errors.description = 'Informe a descrição do procedimento';
+		errors = { path: 'description', message: 'Informe a descrição do procedimento' };
 	}
 
 	return {
