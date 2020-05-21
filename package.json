@@ -4,6 +4,7 @@
 	"main": "src/index.js",
 	"license": "MIT",
 	"scripts": {
+		"start": "node src/index.js",
 		"dev": "nodemon",
 		"production": "pm2 start ecosystem.config.js --env production"
 	},
