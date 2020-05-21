@@ -3,4 +3,5 @@ package-lock.json
 /config/keys_dev.js
 node_modules
 /uploads
+!tmp/uploads/.gitkeep
 .env
