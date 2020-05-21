@@ -32,7 +32,7 @@ const logger = winston.createLogger({
 			colorize: false,
 		}),
 		// log to email
-		new winston.transports.Mail(options),
+		//new winston.transports.Mail(options),
 	],
 	exitOnError: false,
 });

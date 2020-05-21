@@ -75,12 +75,12 @@ app.use(function (err, req, res, next) {
 //fazendo com que as imagens fiquem acessiveis
 app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads')));
 
-if (process.env.NODE_ENV === 'production') {
-	app.use(express.static(path.resolve(__dirname, '..', 'build')));
-	app.get('/app', (req, res) => {
-		res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
-	});
-}
+//if (process.env.NODE_ENV === 'production') {
+//	app.use(express.static(path.resolve(__dirname, '..', 'build')));
+//	app.get('/app', (req, res) => {
+//		res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
+//	});
+//}
 
 app.listen(process.env.PORT || 3001, () => {
 	console.log(`Server started at port 3001`);
