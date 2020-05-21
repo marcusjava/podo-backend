@@ -3,6 +3,9 @@ const fs = require('fs');
 const path = require('path');
 const { promisify } = require('util');
 const History = require('./ConsultHistory');
+const aws = require('aws-sdk');
+
+const s3 = new aws.S3();
 
 const PhotoSchema = new mongoose.Schema(
 	{
@@ -33,7 +36,16 @@ PhotoSchema.pre('save', function () {
 });
 
 PhotoSchema.pre('remove', function () {
-	return promisify(fs.unlink)(path.resolve(__dirname, '..', '..', 'uploads', this.key));
+	if (process.env.STORAGE_TYPE === 's3') {
+		return s3
+			.deleteObject({
+				Bucket: 'podobucket',
+				Key: this.key,
+			})
+			.promise();
+	} else {
+		return promisify(fs.unlink)(path.resolve(__dirname, '..', '..', 'uploads', this.key));
+	}
 });
 
 PhotoSchema.post('save', async function (doc) {

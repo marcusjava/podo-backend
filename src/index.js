@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -14,8 +16,6 @@ const procedures = require('./routes/api/procedures');
 const services = require('./routes/api/services');
 const consults = require('./routes/api/consults');
 const photos = require('./routes/api/photos');
-
-require('dotenv').config();
 
 // URI mongodb atlas mongodb+srv://omnistack:omnistack@cluster0-kjbyd.mongodb.net/semana09?retryWrites=true&w=majority
 mongoose.connect(process.env.MONGO_URI, {
@@ -63,9 +63,9 @@ app.use(function (err, req, res, next) {
 	res.locals.error = req.app.get('env') === 'development' ? err : {};
 	// add this line to include winston logging
 	logger.error(
-		`${dayjs(Date.now()).format('DD-MM-YYYYTHH:mm:ssZ')} - ${err.status || 500} - ${err.message.message}  - ${
-			req.originalUrl
-		} - ${req.method} - ${req.ip}`
+		`${dayjs(Date.now()).format('DD-MM-YYYYTHH:mm:ssZ')} - ${err.status || 500} - ${
+			err.error || 'Internal Error'
+		} - ${err.message.message}  - ${req.originalUrl} - ${req.method} - ${req.ip}`
 	);
 	return res
 		.status(err.status || 500)

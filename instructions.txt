@@ -1,0 +1,10 @@
+MONGO_URI = url do banco local ou online
+SECRET_KEY = chave secreta do mongo
+
+APP_URL = localhost
+
+STORAGE_TYPE = local ou s3
+
+AWS_ACCESS_KEY_ID = chave do amazon s3 
+AWS_SECRET_ACCESS_KEY = secret do amazon s3
+AWS_DEFAULT_REGION = us-east-1
