@@ -33,13 +33,13 @@ const create = async (req, res, next) => {
 
 			if (error.errors.cpf) {
 				err.status = 400;
-				err.message = { path: 'cpf', message: 'CPF já cadastrado' };
+				err.message = { path: 'cpf', message: 'CPF já cadastrado', error: error };
 			} else if (error.errors.email) {
 				err.status = 400;
-				err.message = { path: 'email', message: 'Email já cadastrado' };
+				err.message = { path: 'email', message: 'Email já cadastrado', error: error };
 			} else {
 				err.status = 400;
-				err.message = { path: 'general', message: 'Ocorreu um error ao salvar o usuario' };
+				err.message = { path: 'general', message: 'Ocorreu um error ao salvar o usuario', error: error };
 			}
 
 			return next(err);
@@ -84,7 +84,11 @@ const update = async (req, res, next) => {
 			return res.json(doc);
 		})
 		.catch((error) => {
-			return next(error);
+			return next({
+				status: 400,
+				message: { path: 'name', message: 'Ocorreu um erro ao atualizar o cliente' },
+				error,
+			});
 		});
 };
 

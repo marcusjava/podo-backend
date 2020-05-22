@@ -66,7 +66,9 @@ const update = async (req, res, next) => {
 			doc.save();
 			return res.json(doc);
 		})
-		.catch((error) => res.status(400).json(error));
+		.catch((error) =>
+			next({ status: 400, message: { message: ' Ocorreu um erro ao tentar atualizar o procedimento' }, error })
+		);
 };
 
 const deletePhoto = async (req, res, next) => {

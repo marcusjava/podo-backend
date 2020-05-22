@@ -3,20 +3,10 @@ const winston = require('winston');
 const config = require('../../config');
 const fs = require('fs');
 const path = require('path');
-require('winston-mail');
+const SentryTransport = require('@synapsestudios/winston-sentry');
+const Sentry = require('@sentry/node');
 
-//console, file, and HTTP
-
-const options = {
-	to: 'marcusdevmail@gmail.com',
-	from: 'marcusdevmail@gmail.com',
-	host: 'in-v3.mailjet.com',
-	port: 587,
-	username: 'f677a294738f7e3be7c4a757e6aa1398',
-	password: '917cdb0b9d5a882d2b1089cf28a8d17d',
-	leval: 'error',
-	html: true,
-};
+Sentry.init({ dsn: 'https://010566d2463045d8a47b28226d8f8a5f@o396405.ingest.sentry.io/5249707' });
 
 const logger = winston.createLogger({
 	transports: [
@@ -31,8 +21,7 @@ const logger = winston.createLogger({
 			maxFiles: 5,
 			colorize: false,
 		}),
-		// log to email
-		//new winston.transports.Mail(options),
+		new SentryTransport({ Sentry }),
 	],
 	exitOnError: false,
 });

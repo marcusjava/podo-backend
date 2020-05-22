@@ -96,6 +96,7 @@ const register = async (req, res, next) => {
 						path: 'password',
 						message: 'Ocorreu um erro ao tentar criar o hash da senha do usuario',
 					},
+					error,
 				});
 
 			newUser.password = hash;
@@ -173,6 +174,7 @@ const changePwd = async (req, res, next) => {
 					next({
 						status: 400,
 						message: { path: 'password', message: 'Erro ao tentar alterar a senha' },
+						error,
 					})
 				);
 		});

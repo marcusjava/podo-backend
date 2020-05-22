@@ -26,7 +26,7 @@ const create = async (req, res, next) => {
 		});
 		return res.status(201).json(photo);
 	} catch (error) {
-		return next({ status: 400, message: { message: 'Erro ao salvar a imagem!' } });
+		return next({ status: 400, message: { message: 'Erro ao salvar a imagem!' }, error });
 	}
 };
 
@@ -39,7 +39,6 @@ const delete_photo = async (req, res, next) => {
 		await photo.remove();
 		return res.json({ message: 'Foto excluida com sucesso' });
 	} catch (error) {
-		console.log(error);
 		return next({ status: 400, message: { message: 'Erro ao tentar excluir a imagem!' }, error });
 	}
 };
@@ -50,7 +49,7 @@ const list = async (req, res, next) => {
 		const photos = await Photo.find({ consult: consult_id });
 		return res.json(photos);
 	} catch (error) {
-		return next({ status: 400, message: { message: 'Erro ao obter as imagens!' } });
+		return next({ status: 400, message: { message: 'Erro ao obter as imagens!' }, error });
 	}
 };
 

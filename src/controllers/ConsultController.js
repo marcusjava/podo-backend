@@ -28,7 +28,7 @@ const create = async (req, res, next) => {
 		});
 		return res.status(201).json(newConsult);
 	} catch (error) {
-		return next({ status: 400, message: error });
+		return next({ status: 400, message: { message: 'Ocorreu um erro ao salvar a consulta' }, error });
 	}
 };
 
@@ -140,7 +140,7 @@ const log = async (req, res, next) => {
 		.limit(200)
 		.exec((error, logs) => {
 			if (error) {
-				return next({ status: 400, message: { message: 'Erro ao recuperar os logs da consulta' } });
+				return next({ status: 400, message: { message: 'Erro ao recuperar os logs da consulta' }, error });
 			}
 			return res.json(logs);
 		});

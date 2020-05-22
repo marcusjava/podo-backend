@@ -45,3 +45,8 @@
 {"message":"::ffff:127.0.0.1 - - [21/May/2020:11:45:38 +0000] \"GET /files/podo3-1590061424308.jpg HTTP/1.1\" 404 168 \"http://localhost:3000/inicio/consulta/5eba9abc1e2b0916a854b4aa\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:76.0) Gecko/20100101 Firefox/76.0\"\n","level":"info"}
 {"message":"::ffff:127.0.0.1 - - [21/May/2020:11:45:44 +0000] \"GET /favicon.ico HTTP/1.1\" 404 150 \"-\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:76.0) Gecko/20100101 Firefox/76.0\"\n","level":"info"}
 {"message":"::ffff:127.0.0.1 - - [21/May/2020:13:53:16 +0000] \"GET / HTTP/1.1\" 404 139 \"-\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:76.0) Gecko/20100101 Firefox/76.0\"\n","level":"info"}
+{"message":"::ffff:127.0.0.1 - - [22/May/2020:00:43:19 +0000] \"GET /favicon.ico HTTP/1.1\" 404 150 \"-\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:76.0) Gecko/20100101 Firefox/76.0\"\n","level":"info"}
+{"message":"21-05-2020T21:44:56-03:00 - 400 - Internal Error - CPF já cadastrado  - /api/clients/register - POST - ::ffff:127.0.0.1","level":"error"}
+{"message":"::ffff:127.0.0.1 - - [22/May/2020:00:44:56 +0000] \"POST /api/clients/register HTTP/1.1\" 400 895 \"http://localhost:3000/inicio/clientes\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:76.0) Gecko/20100101 Firefox/76.0\"\n","level":"info"}
+{"message":"21-05-2020T21:45:08-03:00 - 400 - Internal Error - Email já cadastrado  - /api/clients/register - POST - ::ffff:127.0.0.1","level":"error"}
+{"message":"::ffff:127.0.0.1 - - [22/May/2020:00:45:08 +0000] \"POST /api/clients/register HTTP/1.1\" 400 549 \"http://localhost:3000/inicio/clientes\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:76.0) Gecko/20100101 Firefox/76.0\"\n","level":"info"}
