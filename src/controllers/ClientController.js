@@ -8,9 +8,8 @@ const create = async (req, res, next) => {
 		return next({ status: 400, message: errors });
 	}
 	const { name, instagram, cpf, rg, email, address, occupation, contact, nasc, sex, etnia } = req.body;
-
 	const newClient = new Client({
-		avatar: typeof req.file === 'undefined' ? 'no-img.png' : req.file.filename,
+		avatar: typeof req.file === 'undefined' ? 'no-img.png' : req.file.key,
 		name,
 		instagram,
 		cpf,
@@ -65,7 +64,7 @@ const update = async (req, res, next) => {
 			if (!doc) {
 				return res.status(404).json({ message: 'Cliente não localizado' });
 			}
-			doc.avatar = typeof req.file === 'undefined' ? doc.avatar : req.file.filename;
+			doc.avatar = typeof req.file === 'undefined' ? doc.avatar : req.file.key;
 			doc.name = name;
 			doc.instagram = instagram;
 			doc.cpf = cpf;

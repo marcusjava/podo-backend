@@ -60,11 +60,9 @@ const ClientSchema = new mongoose.Schema(
 );
 
 ClientSchema.virtual('avatar_url').get(function () {
-	return `http://localhost:3001/files/${this.avatar}`;
-});
-
-ClientSchema.virtual('insta_url').get(function () {
-	return `https://www.instagram.com/${this.instagram}`;
+	return process.env.STORAGE_TYPE == 's3'
+		? `https://podobucket.s3.us-east-2.amazonaws.com/${this.avatar}`
+		: `http://localhost:3001/files/${this.avatar}`;
 });
 
 ClientSchema.plugin(mongooseHistory);

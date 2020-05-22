@@ -25,11 +25,10 @@ const storageTypes = {
 		acl: 'public-read',
 		key: (req, file, cb) => {
 			//gerando hash para anexar ao nome do arquivo
-			console.log(file);
 			const ext = path.extname(file.originalname);
 			const name = path.basename(file.originalname, ext);
-			const filename = `${name}-${Date.now()}${ext}`;
-			cb(null, filename);
+			file.key = `${name}-${Date.now()}${ext}`;
+			cb(null, file.key);
 		},
 	}),
 };

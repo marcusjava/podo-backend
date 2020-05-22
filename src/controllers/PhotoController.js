@@ -8,7 +8,6 @@ const create = async (req, res, next) => {
 	const consult = await Consult.find({ _id: consult_id });
 
 	const { originalname, size, key, location: url = '' } = req.file;
-	console.log(req.file.url);
 	if (!consult) {
 		return next({ status: 404, message: { message: 'Consulta não localizada!' } });
 	}
