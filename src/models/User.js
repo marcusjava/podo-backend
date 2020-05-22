@@ -55,8 +55,10 @@ const UserSchema = mongoose.Schema(
 	}
 );
 
-UserSchema.virtual('thumbnail_url').get(function() {
-	return `http://localhost:3001/files/${this.thumbnail}`;
+UserSchema.virtual('avatar_url').get(function () {
+	return process.env.STORAGE_TYPE == 'local'
+		? `http://localhost:3001/files/${this.thumbnail}`
+		: `https://podobucket.s3.us-east-2.amazonaws.com/${this.thumbnail}`;
 });
 
 UserSchema.plugin(mongooseHistory);

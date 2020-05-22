@@ -37,7 +37,10 @@ const login = async (req, res, next) => {
 					name: user.name,
 					email: user.email,
 					role: user.role,
-					avatar_url: `http://localhost:3001/files/${user.thumbnail}`,
+					avatar_url:
+						process.env.STORAGE_TYPE == 'local'
+							? `http://localhost:3001/files/${user.thumbnail}`
+							: `https://podobucket.s3.us-east-2.amazonaws.com/${user.thumbnail}`,
 				};
 
 				jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '24h' }, (error, token) => {
@@ -74,7 +77,7 @@ const register = async (req, res, next) => {
 	}
 
 	const newUser = new User({
-		thumbnail: typeof req.file === 'undefined' ? 'no-img.png' : req.file.filename,
+		thumbnail: typeof req.file === 'undefined' ? 'no-img.png' : req.file.key,
 		name,
 		phone,
 		nasc,
@@ -139,7 +142,7 @@ const update = async (req, res, next) => {
 	User.findByIdAndUpdate(
 		{ _id: id },
 		{
-			thumbnail: typeof req.file === 'undefined' ? user.thumbnail : req.file.filename,
+			thumbnail: typeof req.file === 'undefined' ? user.thumbnail : req.file.key,
 			name,
 			phone,
 			nasc,
