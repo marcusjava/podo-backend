@@ -57,7 +57,6 @@ PhotoSchema.post('save', async function (doc) {
 });
 
 PhotoSchema.post('remove', async function (doc) {
-	console.log(doc);
 	await History.create({
 		o: 'r',
 		docId: doc.consult._id,

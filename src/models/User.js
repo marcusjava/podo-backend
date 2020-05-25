@@ -62,6 +62,7 @@ UserSchema.virtual('avatar_url').get(function () {
 });
 
 UserSchema.plugin(mongooseHistory);
+
 UserSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model('User', UserSchema);

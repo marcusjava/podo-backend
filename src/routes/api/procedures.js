@@ -11,22 +11,12 @@ const ProcedureController = require('../../controllers/ProcedureController');
 // @route POST api/procedures
 // @desc Procedure create
 // @access Private
-routes.post(
-	'/',
-	passport.authenticate('jwt', { session: false }),
-	upload.array('thumbnails', 5),
-	ProcedureController.create
-);
+routes.post('/', passport.authenticate('jwt', { session: false }), ProcedureController.create);
 
 // @route PUT api/procedures/:id
 // @desc Update Procedure
 // @access Private
-routes.put(
-	'/:id',
-	passport.authenticate('jwt', { session: false }),
-	upload.array('thumbnails', 5),
-	ProcedureController.update
-);
+routes.put('/:id', passport.authenticate('jwt', { session: false }), ProcedureController.update);
 
 // @route PUT api/procedures/:id
 // @desc Update Procedure

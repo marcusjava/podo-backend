@@ -16,7 +16,7 @@ const UserController = require('../../controllers/UserController');
 // - passport security - OK
 routes.post(
 	'/register',
-	//passport.authenticate('jwt', { session: false }),
+	passport.authenticate('jwt', { session: false }),
 	upload.single('thumbnail'),
 	UserController.register
 );

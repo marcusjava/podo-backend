@@ -25,7 +25,6 @@ const create = async (req, res, next) => {
 
 	try {
 		newProcedure = await Procedure.create({
-			photos: req.files.map((thumbnail) => thumbnail.filename),
 			service,
 			name,
 			description,
@@ -57,7 +56,6 @@ const update = async (req, res, next) => {
 			if (!doc) {
 				return next({ status: 404, message: { path: 'procedure', message: 'Procedimento não localizado' } });
 			}
-			doc.photos = [...doc.photos, ...req.files.map((thumbnail) => thumbnail.filename)];
 			doc.service = service;
 			doc.name = name;
 			doc.description = description;

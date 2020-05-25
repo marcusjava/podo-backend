@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const paginate = require('mongoose-paginate');
 const mongoose_populate = require('mongoose-autopopulate');
 const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
@@ -422,10 +421,6 @@ ConsultSchema.post('findOneAndUpdate', async (doc) => {
 });
 
 ConsultSchema.plugin(mongoose_populate);
-
-ConsultSchema.virtual('photos_urls').get(function () {
-	return this.photos.map((photo) => `http://localhost:3001/files/${photo}`);
-});
 
 ConsultSchema.virtual('dateLocal').get(function () {
 	return {
