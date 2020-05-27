@@ -21,8 +21,8 @@ const logger = winston.createLogger({
 		new SentryTransport({ Sentry }),
 		new winston.transports.MongoDB({
 			db: process.env.MONGO_URI,
-			//username: process.env.MONGO_USER,
-			//password: process.env.MONGO_PWD,
+			username: process.env.MONGO_USER,
+			password: process.env.MONGO_PWD,
 			tryReconnect: true,
 		}),
 	],
