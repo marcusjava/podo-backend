@@ -1,0 +1,5 @@
+{"message":"27-05-2020T20:07:21-03:00 - 400 - Internal Error - Já existe consulta marcada nesta data/hora  - /api/consults - POST - ::ffff:127.0.0.1","level":"error"}
+{"message":"::ffff:127.0.0.1 - - [27/May/2020:23:07:21 +0000] \"POST /api/consults HTTP/1.1\" 400 71 \"http://localhost:3000/inicio/principal\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:76.0) Gecko/20100101 Firefox/76.0\"\n","level":"info"}
+{"message":"::ffff:127.0.0.1 - - [27/May/2020:23:31:08 +0000] \"GET /logs/ HTTP/1.1\" 404 144 \"-\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:76.0) Gecko/20100101 Firefox/76.0\"\n","level":"info"}
+{"message":"::ffff:127.0.0.1 - - [27/May/2020:23:31:28 +0000] \"GET /files/ HTTP/1.1\" 404 145 \"-\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:76.0) Gecko/20100101 Firefox/76.0\"\n","level":"info"}
+{"message":"::ffff:127.0.0.1 - - [27/May/2020:23:53:16 +0000] \"GET /favicon.ico HTTP/1.1\" 404 150 \"-\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:76.0) Gecko/20100101 Firefox/76.0\"\n","level":"info"}

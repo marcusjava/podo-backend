@@ -9,6 +9,7 @@ const logger = require('./config/logger');
 const passport = require('passport');
 var fs = require('fs');
 const dayjs = require('dayjs');
+const serveIndex = require('serve-index');
 
 const users = require('./routes/api/users');
 const clients = require('./routes/api/clients');
@@ -70,6 +71,13 @@ app.use(function (err, req, res, next) {
 
 //fazendo com que as imagens fiquem acessiveis
 app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads')));
+
+//fazendo com que as imagens fiquem acessiveis
+app.use(
+	'/logs',
+	express.static(path.resolve(__dirname, '..', 'logs')),
+	serveIndex(path.resolve(__dirname, '..', 'logs'), { icons: true })
+);
 
 //if (process.env.NODE_ENV === 'production') {
 //	app.use(express.static(path.resolve(__dirname, '..', 'build')));

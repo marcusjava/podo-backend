@@ -2,7 +2,6 @@ const winston = require('winston');
 const path = require('path');
 const SentryTransport = require('@synapsestudios/winston-sentry');
 const Sentry = require('@sentry/node');
-require('winston-mongodb');
 
 Sentry.init({ dsn: process.env.SENTRY_DSN });
 
@@ -11,20 +10,13 @@ const logger = winston.createLogger({
 		new winston.transports.Console({ level: 'info', handleExceptions: true, json: false, colorize: true }),
 		new winston.transports.File({
 			level: 'info',
-			filename: path.join(__dirname, '..', '..', 'access.log'),
+			filename: path.join(__dirname, '..', '..', 'logs', 'access.log'),
 			handleExceptions: true,
 			json: true,
 			maxsize: 5242880, // 5MB
-			maxFiles: 5,
 			colorize: false,
 		}),
 		new SentryTransport({ Sentry }),
-		new winston.transports.MongoDB({
-			db: process.env.MONGO_URI,
-			username: process.env.MONGO_USER,
-			password: process.env.MONGO_PWD,
-			tryReconnect: true,
-		}),
 	],
 	exitOnError: false,
 });
