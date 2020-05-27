@@ -1,7 +1,0 @@
-{
-	"loggly": {
-		"token": "33ec731b-4747-4278-b7da-62a3c8f3fb8f",
-		"subdomain": "localhost",
-		"tags": ["Winston-NodeJS"]
-	}
-}

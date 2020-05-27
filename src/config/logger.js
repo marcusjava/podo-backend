@@ -1,6 +1,4 @@
 const winston = require('winston');
-const config = require('../../config');
-const fs = require('fs');
 const path = require('path');
 const SentryTransport = require('@synapsestudios/winston-sentry');
 const Sentry = require('@sentry/node');
@@ -23,8 +21,8 @@ const logger = winston.createLogger({
 		new SentryTransport({ Sentry }),
 		new winston.transports.MongoDB({
 			db: process.env.MONGO_URI,
-			username: process.env.MONGO_USER,
-			password: process.env.MONGO_PWD,
+			//username: process.env.MONGO_USER,
+			//password: process.env.MONGO_PWD,
 			tryReconnect: true,
 		}),
 	],
