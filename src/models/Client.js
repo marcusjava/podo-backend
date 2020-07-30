@@ -24,8 +24,14 @@ const ClientSchema = new mongoose.Schema(
 		address: {
 			street: { type: String },
 			neighborhood: { type: String },
-			city: { type: String },
-			state: { type: String },
+			city: {
+				value: String,
+				label: String,
+			},
+			state: {
+				value: String,
+				label: String,
+			},
 			cep: { type: String },
 		},
 

@@ -104,7 +104,6 @@ const list = async (req, res, next) => {
 		condition.client = { $in: clients };
 	}
 	if (client_id !== undefined) {
-		console.log(client_id);
 		condition.client = { _id: client_id };
 	}
 
