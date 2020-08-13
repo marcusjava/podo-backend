@@ -66,7 +66,12 @@ app.use(function (err, req, res, next) {
 	);
 	return res
 		.status(err.status || 500)
-		.json(err.message || 'Desculpe mas algo errado aconteceu, entre em contato com o administrador');
+		.json(
+			err.message || {
+				path: 'general',
+				message: 'Desculpe mas algo errado aconteceu, entre em contato com o administrador',
+			}
+		);
 });
 
 //fazendo com que as imagens fiquem acessiveis

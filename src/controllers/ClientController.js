@@ -85,7 +85,7 @@ const update = async (req, res, next) => {
 		.catch((error) => {
 			return next({
 				status: 400,
-				message: { path: 'name', message: 'Ocorreu um erro ao atualizar o cliente' },
+				message: { path: 'general', message: 'Ocorreu um erro ao atualizar o cliente' },
 				error,
 			});
 		});
@@ -97,7 +97,7 @@ const retrieve = async (req, res, next) => {
 	const client = await Client.findById(id);
 
 	if (!client) {
-		return next({ status: 400, message: { path: 'client', message: 'Cliente não localizado' } });
+		return next({ status: 404, message: { path: 'general', message: 'Cliente não localizado' } });
 	}
 
 	return res.json(client);

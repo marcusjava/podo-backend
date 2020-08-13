@@ -172,7 +172,9 @@ const changePwd = async (req, res, next) => {
 		bcrypt.hash(password, salt, (error, hash) => {
 			if (error) throw error;
 			User.findByIdAndUpdate({ _id: id }, { password: hash }, { new: true })
-				.then((user) => res.json({ msg: 'Senha atualizada com sucesso' }))
+				.then((user) =>
+					res.json({ status: 200, msg: { path: 'general', message: 'Senha atualizada com sucesso' } })
+				)
 				.catch((error) =>
 					next({
 						status: 400,

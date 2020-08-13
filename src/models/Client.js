@@ -32,7 +32,7 @@ const ClientSchema = new mongoose.Schema(
 				value: String,
 				label: String,
 			},
-			cep: { type: String },
+			cep: { type: String, default: '49000-000' },
 		},
 
 		occupation: { type: String },

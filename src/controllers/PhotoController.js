@@ -9,7 +9,7 @@ const create = async (req, res, next) => {
 
 	const { originalname, size, key, location: url = '' } = req.file;
 	if (!consult) {
-		return next({ status: 404, message: { message: 'Consulta não localizada!' } });
+		return next({ status: 404, message: { path: 'general', message: 'Consulta não localizada!' } });
 	}
 
 	try {
@@ -25,7 +25,7 @@ const create = async (req, res, next) => {
 		});
 		return res.status(201).json(photo);
 	} catch (error) {
-		return next({ status: 400, message: { message: 'Erro ao salvar a imagem!' }, error });
+		return next({ status: 400, message: { path: 'general', message: 'Erro ao salvar a imagem!', error } });
 	}
 };
 
@@ -36,9 +36,9 @@ const delete_photo = async (req, res, next) => {
 		const photo = await Photo.findById(id);
 		photo.updatedBy = req.user;
 		await photo.remove();
-		return res.json({ message: 'Foto excluida com sucesso' });
+		return res.json({ path: 'general', message: 'Foto excluida com sucesso' });
 	} catch (error) {
-		return next({ status: 400, message: { message: 'Erro ao tentar excluir a imagem!' }, error });
+		return next({ status: 400, message: { path: 'general', message: 'Erro ao tentar excluir a imagem!', error } });
 	}
 };
 
@@ -48,7 +48,7 @@ const list = async (req, res, next) => {
 		const photos = await Photo.find({ consult: consult_id });
 		return res.json(photos);
 	} catch (error) {
-		return next({ status: 400, message: { message: 'Erro ao obter as imagens!' }, error });
+		return next({ status: 400, message: { path: 'general', message: 'Erro ao obter as imagens!', error } });
 	}
 };
 

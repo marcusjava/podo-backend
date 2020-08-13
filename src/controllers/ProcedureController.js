@@ -1,19 +1,16 @@
 const Procedure = require('../models/Procedure');
 const fs = require('fs');
 const path = require('path');
+const ValidateProcedure = require('../validation/procedure');
 
 const create = async (req, res, next) => {
-	//const { errors, isValid} = ValidateProcedure(req.body)
+	const { errors, isValid } = ValidateProcedure(req.body);
+
+	if (!isValid) {
+		return next({ status: 400, message: errors });
+	}
 
 	const { service, name, description } = req.body;
-
-	if (!service) {
-		return next({ status: 400, message: { path: 'service', message: 'Campo serviço é obrigatorio' } });
-	}
-
-	if (!name) {
-		return next({ status: 400, message: { path: 'name', message: 'Campo nome é obrigatorio' } });
-	}
 
 	const procedure = await Procedure.findOne({ name });
 
@@ -65,7 +62,7 @@ const update = async (req, res, next) => {
 			return res.json(doc);
 		})
 		.catch((error) =>
-			next({ status: 400, message: { message: ' Ocorreu um erro ao tentar atualizar o procedimento' }, error })
+			next({ status: 400, message: { message: ' Ocorreu um erro ao tentar atualizar o procedimento', error } })
 		);
 };
 

@@ -1,13 +1,18 @@
 const Consult = require('../models/Consult');
 const Client = require('../models/Client');
 const ConsultHistory = require('../models/ConsultHistory');
+const ValidateConsult = require('../validation/consult');
 
 //TODO
 // Ver filtro de uma consulta com mesmo paciente
 // no mesmo horario
 // DESCONSIDERAR SE A CONSULTA ESTIVER COM STATUS CANCELADA
 const create = async (req, res, next) => {
-	//const { errors, isValid} = ValidateConsult(req.body)
+	const { errors, isValid } = ValidateConsult(req.body);
+
+	if (!isValid) {
+		return next({ status: 400, message: errors });
+	}
 	const { date, client, procedures, type_consult, observations, status } = req.body;
 
 	let consult = await Consult.findOne({ date });
@@ -28,7 +33,11 @@ const create = async (req, res, next) => {
 		});
 		return res.status(201).json(newConsult);
 	} catch (error) {
-		return next({ status: 400, message: { message: 'Ocorreu um erro ao salvar a consulta' }, error });
+		return next({
+			status: 400,
+			message: { path: 'general', message: 'Ocorreu um erro ao salvar a consulta' },
+			error,
+		});
 	}
 };
 
@@ -42,6 +51,12 @@ const create = async (req, res, next) => {
  */
 
 const update = async (req, res, next) => {
+	console.log(req.body);
+	const { errors, isValid } = ValidateConsult(req.body);
+
+	if (!isValid) {
+		return next({ status: 400, message: errors });
+	}
 	const { date, client, procedures, type_consult, anamnese, observations, status } = req.body;
 	const { id } = req.params;
 
@@ -61,12 +76,15 @@ const update = async (req, res, next) => {
 	)
 		.then((doc) => {
 			if (!doc) {
-				return next({ status: 404, message: { message: 'Consulta não localizada' } });
+				return next({ status: 404, message: { path: 'general', message: 'Consulta não localizada' } });
 			}
 			return res.json(doc);
 		})
 		.catch((error) => {
-			return next({ status: 400, message: { message: error } });
+			return next({
+				status: 400,
+				message: { path: 'general', message: 'Ocorreu um erro ao atualizar a consulta', error },
+			});
 		});
 };
 
@@ -76,7 +94,7 @@ const retrieve = async (req, res, next) => {
 	const consult = await Consult.findById(id);
 
 	if (!consult) {
-		return next({ status: 404, message: { message: 'Consulta não localizada' } });
+		return next({ status: 404, message: { path: 'general', message: 'Consulta não localizada' } });
 	}
 
 	return res.json(consult);
