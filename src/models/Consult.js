@@ -3,6 +3,12 @@ const mongoose_populate = require('mongoose-autopopulate');
 const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
 const History = require('./ConsultHistory');
+const fs = require('fs');
+const path = require('path');
+const { promisify } = require('util');
+const aws = require('aws-sdk');
+
+const s3 = new aws.S3();
 
 dayjs.extend(utc);
 
@@ -24,15 +30,17 @@ const ConsultSchema = new mongoose.Schema(
 				autopopulate: true,
 			},
 		],
+		photos: [
+			{
+				name: String,
+				size: Number,
+				key: String,
+				url: String,
+			},
+		],
 		observations: {
 			type: String,
 		},
-		photos: [
-			{
-				type: mongoose.Schema.Types.ObjectId,
-				ref: 'Photo',
-			},
-		],
 		//0 - Agendada 1 - Retorno 2 - Urgencia
 		type_consult: {
 			value: String,
@@ -385,6 +393,10 @@ const ConsultSchema = new mongoose.Schema(
 			value: String,
 			label: String,
 		},
+
+		finishDate: {
+			type: String,
+		},
 		createdBy: {
 			type: mongoose.Types.ObjectId,
 			ref: 'User',
@@ -412,6 +424,25 @@ ConsultSchema.post('save', async (doc) => {
 	});
 });
 
+ConsultSchema.pre('save', function () {
+	if (!this.url) {
+		this.url = `${process.env.APP_URL}/files/${this.key}`;
+	}
+});
+
+ConsultSchema.pre('remove', function () {
+	if (process.env.STORAGE_TYPE === 's3') {
+		return s3
+			.deleteObject({
+				Bucket: 'podobucket',
+				Key: this.key,
+			})
+			.promise();
+	} else {
+		return promisify(fs.unlink)(path.resolve(__dirname, '..', '..', 'uploads', this.key));
+	}
+});
+
 ConsultSchema.post('findOneAndUpdate', async (doc) => {
 	await History.create({
 		o: 'u',
@@ -421,13 +452,5 @@ ConsultSchema.post('findOneAndUpdate', async (doc) => {
 });
 
 ConsultSchema.plugin(mongoose_populate);
-
-ConsultSchema.virtual('dateLocal').get(function () {
-	return {
-		date: dayjs(this.date).local().format('DD/MM/YYYY HH:mm'),
-		createdAt: dayjs(this.createdAt).local().format('DD/MM/YYYY HH:mm'),
-		updatedAt: dayjs(this.updatedAt).local().format('DD/MM/YYYY HH:mm'),
-	};
-});
 
 module.exports = mongoose.model('Consult', ConsultSchema);

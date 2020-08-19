@@ -16,7 +16,6 @@ const clients = require('./routes/api/clients');
 const procedures = require('./routes/api/procedures');
 const services = require('./routes/api/services');
 const consults = require('./routes/api/consults');
-const photos = require('./routes/api/photos');
 
 // URI mongodb atlas mongodb+srv://omnistack:omnistack@cluster0-kjbyd.mongodb.net/semana09?retryWrites=true&w=majority
 mongoose.connect(process.env.MONGO_URI, {
@@ -53,7 +52,6 @@ app.use('/api/clients', clients);
 app.use('/api/procedures', procedures);
 app.use('/api/services', services);
 app.use('/api/consults', consults);
-app.use('/api/photos', photos);
 
 //Handle errors to log
 app.use(function (err, req, res, next) {
@@ -64,14 +62,12 @@ app.use(function (err, req, res, next) {
 			err.error || 'Internal Error'
 		} - ${err.message.message}  - ${req.originalUrl} - ${req.method} - ${req.ip}`
 	);
-	return res
-		.status(err.status || 500)
-		.json(
-			err.message || {
-				path: 'general',
-				message: 'Desculpe mas algo errado aconteceu, entre em contato com o administrador',
-			}
-		);
+	return res.status(err.status || 500).json(
+		err.message || {
+			path: 'general',
+			message: 'Desculpe mas algo errado aconteceu, entre em contato com o administrador',
+		}
+	);
 });
 
 //fazendo com que as imagens fiquem acessiveis

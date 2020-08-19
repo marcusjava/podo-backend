@@ -18,6 +18,21 @@ routes.post('/', passport.authenticate('jwt', { session: false }), ConsultContro
 // @access Private
 routes.put('/:id', passport.authenticate('jwt', { session: false }), ConsultController.update);
 
+// @route PUT api/consults/:id
+// @desc Update Consult
+// @access Private
+routes.put(
+	'/:id/photos',
+	upload.array('photos', 8),
+	passport.authenticate('jwt', { session: false }),
+	ConsultController.savePhotos
+);
+
+// @route PUT api/consults/:id
+// @desc Update Consult
+// @access Private
+routes.delete('/:id/photos/:photo_id', passport.authenticate('jwt', { session: false }), ConsultController.deletePhoto);
+
 // @route GET api/consults/:id
 // @desc GET Consult
 // @access Private

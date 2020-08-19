@@ -51,7 +51,6 @@ const create = async (req, res, next) => {
  */
 
 const update = async (req, res, next) => {
-	console.log(req.body);
 	const { errors, isValid } = ValidateConsult(req.body);
 
 	if (!isValid) {
@@ -63,13 +62,13 @@ const update = async (req, res, next) => {
 	Consult.findByIdAndUpdate(
 		{ _id: id },
 		{
-			date: date,
-			client: client,
-			procedures: procedures,
-			type_consult: type_consult,
-			anamnese: anamnese,
-			observations: observations,
-			status: status,
+			date,
+			client,
+			procedures,
+			type_consult,
+			anamnese,
+			observations,
+			status,
 			updatedBy: req.user,
 		},
 		{ new: true, useFindAndModify: false }
@@ -86,6 +85,33 @@ const update = async (req, res, next) => {
 				message: { path: 'general', message: 'Ocorreu um erro ao atualizar a consulta', error },
 			});
 		});
+};
+
+const deletePhoto = async (req, res, next) => {
+	const { id, photo_id } = req.params;
+
+	Consult.findByIdAndUpdate({ _id: id }, { $pull: { photos: { _id: photo_id } } }, { new: true })
+		.then((doc) => res.status(200).json(doc))
+		.catch((error) =>
+			next({ status: 400, message: { path: 'general', message: 'Ocorreu um erro ao excluir a foto', error } })
+		);
+};
+
+const savePhotos = async (req, res, next) => {
+	const url = process.env.URL || 'http://localhost:3001';
+	const { id } = req.params;
+
+	const consult = await Consult.findById(id);
+
+	consult.photos = req.files.map((file) => ({
+		name: file.originalname,
+		size: file.size,
+		key: file.key,
+		url: process.env.STORAGE_TYPE === 'local' ? `http://localhost:3001/files/${file.key}` : url,
+	}));
+
+	await consult.save();
+	return res.status(200).json(consult);
 };
 
 const retrieve = async (req, res, next) => {
@@ -106,9 +132,11 @@ const list = async (req, res, next) => {
 	let condition = {};
 	let clients;
 
-	condition.date = {
-		$gte: new Date().setHours(00, 00, 00),
-	};
+	if (start !== undefined) {
+		condition.date = {
+			$gte: new Date(new Date(Date.now()).setHours(00, 00, 00)),
+		};
+	}
 
 	if (start !== undefined && end !== undefined) {
 		condition.date = {
@@ -132,6 +160,7 @@ const list = async (req, res, next) => {
 			if (error) {
 				return next({ status: 400, message: { message: error } });
 			}
+
 			return res.json(consults);
 		});
 };
@@ -163,4 +192,4 @@ const log = async (req, res, next) => {
 		});
 };
 
-module.exports = { create, update, retrieve, list, log };
+module.exports = { create, update, retrieve, list, log, savePhotos, deletePhoto };
