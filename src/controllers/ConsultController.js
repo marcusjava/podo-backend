@@ -124,6 +124,10 @@ const savePhotos = async (req, res, next) => {
 
 	const consult = await Consult.findById(id);
 
+	if (consult.photos.length >= 9) {
+		return next({ status: 500, message: { path: 'general', message: 'Limite maximo de fotos excedido' } });
+	}
+
 	const newPhotos = req.files.map((file) => ({
 		name: file.originalname,
 		size: file.size,

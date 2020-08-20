@@ -23,7 +23,7 @@ routes.put('/:id', passport.authenticate('jwt', { session: false }), ConsultCont
 // @access Private
 routes.put(
 	'/:id/photos',
-	upload.array('photos', 8),
+	upload.array('photos', 10),
 	passport.authenticate('jwt', { session: false }),
 	ConsultController.savePhotos
 );
