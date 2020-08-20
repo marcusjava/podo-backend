@@ -431,6 +431,7 @@ ConsultSchema.pre('save', function () {
 });
 
 ConsultSchema.pre('remove', function () {
+	console.log('Remove fired');
 	if (process.env.STORAGE_TYPE === 's3') {
 		return s3
 			.deleteObject({

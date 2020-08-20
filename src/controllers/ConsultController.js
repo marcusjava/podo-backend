@@ -3,6 +3,13 @@ const Client = require('../models/Client');
 const ConsultHistory = require('../models/ConsultHistory');
 const ValidateConsult = require('../validation/consult');
 
+const fs = require('fs');
+const path = require('path');
+const { promisify } = require('util');
+const aws = require('aws-sdk');
+
+const s3 = new aws.S3();
+
 //TODO
 // Ver filtro de uma consulta com mesmo paciente
 // no mesmo horario
@@ -90,25 +97,44 @@ const update = async (req, res, next) => {
 const deletePhoto = async (req, res, next) => {
 	const { id, photo_id } = req.params;
 
+	const consult = await Consult.findById({ _id: id });
+
+	const photo = consult.photos.filter((photo) => photo._id == photo_id);
+
 	Consult.findByIdAndUpdate({ _id: id }, { $pull: { photos: { _id: photo_id } } }, { new: true })
-		.then((doc) => res.status(200).json(doc))
+		.then((doc) => {
+			if (process.env.STORAGE_TYPE === 's3') {
+				s3.deleteObject({
+					Bucket: 'podobucket',
+					Key: photo[0].key,
+				}).promise();
+			} else {
+				promisify(fs.unlink)(path.resolve(__dirname, '..', '..', 'uploads', photo[0].key));
+			}
+
+			return res.status(200).json(doc);
+		})
 		.catch((error) =>
 			next({ status: 400, message: { path: 'general', message: 'Ocorreu um erro ao excluir a foto', error } })
 		);
 };
 
 const savePhotos = async (req, res, next) => {
-	const url = process.env.URL || 'http://localhost:3001';
 	const { id } = req.params;
 
 	const consult = await Consult.findById(id);
 
-	consult.photos = req.files.map((file) => ({
+	const newPhotos = req.files.map((file) => ({
 		name: file.originalname,
 		size: file.size,
 		key: file.key,
-		url: process.env.STORAGE_TYPE === 'local' ? `http://localhost:3001/files/${file.key}` : url,
+		url:
+			process.env.STORAGE_TYPE === 'local'
+				? `http://localhost:3001/files/${file.key}`
+				: `https://podobucket.s3.us-east-2.amazonaws.com/${file.key}`,
 	}));
+
+	consult.photos = [...consult.photos, ...newPhotos];
 
 	await consult.save();
 	return res.status(200).json(consult);
