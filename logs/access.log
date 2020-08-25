@@ -207,3 +207,5 @@
 {"message":"::ffff:127.0.0.1 - - [20/Aug/2020:22:24:06 +0000] \"GET /favicon.ico HTTP/1.1\" 404 150 \"-\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:79.0) Gecko/20100101 Firefox/79.0\"\n","level":"info"}
 {"message":"20-08-2020T20:12:58-03:00 - 500 - Internal Error - Limite maximo de fotos excedido  - /api/consults/5f3ef4d1c53fb0279a44d12a/photos - PUT - ::ffff:127.0.0.1","level":"error"}
 {"message":"::ffff:127.0.0.1 - - [20/Aug/2020:23:12:58 +0000] \"PUT /api/consults/5f3ef4d1c53fb0279a44d12a/photos HTTP/1.1\" 500 62 \"http://localhost:3000/inicio/consulta/5f3ef4d1c53fb0279a44d12a\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:79.0) Gecko/20100101 Firefox/79.0\"\n","level":"info"}
+{"message":"24-08-2020T22:19:26-03:00 - 404 - Internal Error - Usuario não encontrado  - /api/users/login - POST - ::ffff:127.0.0.1","level":"error"}
+{"message":"::ffff:127.0.0.1 - - [25/Aug/2020:01:19:26 +0000] \"POST /api/users/login HTTP/1.1\" 404 52 \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:79.0) Gecko/20100101 Firefox/79.0\"\n","level":"info"}
