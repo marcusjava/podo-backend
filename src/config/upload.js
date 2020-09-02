@@ -31,10 +31,6 @@ const storageTypes = {
 			file.key = `${name}-${Date.now()}${ext}`;
 			cb(null, file.key);
 		},
-		resize: {
-			width: 600,
-			height: 400,
-		},
 	}),
 };
 

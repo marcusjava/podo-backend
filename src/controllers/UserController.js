@@ -131,9 +131,11 @@ const update = async (req, res, next) => {
 	}
 	const { id } = req.params;
 
-	const { name, phone, nasc, cpf, rg, email, address, role, status } = req.body;
+	console.log(req.body);
 
-	const user = await User.findById({ _id: id });
+	const { name, phone, nasc, cpf, rg, password, email, address, role, status } = req.body;
+
+	const user = await User.findById({ _id: id }).select('+password');
 
 	if (!user) {
 		return next({ status: 404, message: { path: 'user', message: 'Usuario não encontrado' } });
@@ -156,7 +158,18 @@ const update = async (req, res, next) => {
 		},
 		{ new: true }
 	)
-		.then((user) => res.json(user))
+		.then((user) => {
+			if (password != undefined) {
+				bcrypt.genSalt(10, (error, salt) => {
+					bcrypt.hash(password, salt, (error, hash) => {
+						if (error) throw error;
+						user.password = hash;
+						user.save();
+					});
+				});
+			}
+			return res.status(200).json(user);
+		})
 		.catch((error) => next({ status: 400, message: error }));
 };
 
