@@ -91,6 +91,6 @@ app.use('/', (req, res) => {
 	return res.send('Servidor inicializado com sucesso');
 });
 
-app.listen(process.env.PORT || 3001, () => {
-	console.log(`Server started at port 3001`);
+app.listen(process.env.PORT || 3000, () => {
+	console.log(`Server started at port 3000`);
 });
