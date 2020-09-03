@@ -6,7 +6,8 @@
 	"scripts": {
 		"start": "node src/index.js",
 		"dev": "nodemon",
-		"production": "pm2 start ecosystem.config.js --env production"
+		"production": "pm2 start ecosystem.config.js --env production",
+		"prestart": "npm i"
 	},
 	"dependencies": {
 		"@sentry/node": "5.15.5",
