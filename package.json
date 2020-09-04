@@ -37,6 +37,7 @@
 		"validator": "^12.2.0",
 		"winston": "^3.2.1"
 	},
+	"proxy": "http://localhost:3001",
 	"devDependencies": {
 		"nodemon": "^2.0.2"
 	}
