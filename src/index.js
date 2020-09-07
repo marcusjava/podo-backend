@@ -18,7 +18,7 @@ const services = require('./routes/api/services');
 const consults = require('./routes/api/consults');
 
 // URI mongodb atlas mongodb+srv://omnistack:omnistack@cluster0-kjbyd.mongodb.net/semana09?retryWrites=true&w=majority
-mongoose.connect(process.env.MONGO_URI_UMBLER, {
+mongoose.connect(process.env.MONGO_URI_ATLAS, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 	useCreateIndex: true,
