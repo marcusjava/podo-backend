@@ -7,15 +7,15 @@
     "static/js/2.61687724.chunk.js": "/static/js/2.61687724.chunk.js",
     "static/js/2.61687724.chunk.js.map": "/static/js/2.61687724.chunk.js.map",
     "main.css": "/static/css/main.acf42b31.chunk.css",
-    "main.js": "/static/js/main.c3e6a450.chunk.js",
-    "main.js.map": "/static/js/main.c3e6a450.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.1978bf2c.js",
-    "runtime-main.js.map": "/static/js/runtime-main.1978bf2c.js.map",
+    "main.js": "/static/js/main.3ac175c8.chunk.js",
+    "main.js.map": "/static/js/main.3ac175c8.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.5b1e36dc.js",
+    "runtime-main.js.map": "/static/js/runtime-main.5b1e36dc.js.map",
     "static/css/5.758c8bbf.chunk.css": "/static/css/5.758c8bbf.chunk.css",
     "static/js/5.d5844b12.chunk.js": "/static/js/5.d5844b12.chunk.js",
     "static/js/5.d5844b12.chunk.js.map": "/static/js/5.d5844b12.chunk.js.map",
-    "static/js/6.fdc45a97.chunk.js": "/static/js/6.fdc45a97.chunk.js",
-    "static/js/6.fdc45a97.chunk.js.map": "/static/js/6.fdc45a97.chunk.js.map",
+    "static/js/6.ee3191cc.chunk.js": "/static/js/6.ee3191cc.chunk.js",
+    "static/js/6.ee3191cc.chunk.js.map": "/static/js/6.ee3191cc.chunk.js.map",
     "static/js/7.3b5b3ea3.chunk.js": "/static/js/7.3b5b3ea3.chunk.js",
     "static/js/7.3b5b3ea3.chunk.js.map": "/static/js/7.3b5b3ea3.chunk.js.map",
     "static/css/8.f3719e5a.chunk.css": "/static/css/8.f3719e5a.chunk.css",
@@ -42,7 +42,7 @@
     "static/js/17.c57691b0.chunk.js": "/static/js/17.c57691b0.chunk.js",
     "static/js/17.c57691b0.chunk.js.map": "/static/js/17.c57691b0.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.03104dedc339835ec98cbfd9c07e47a5.js": "/precache-manifest.03104dedc339835ec98cbfd9c07e47a5.js",
+    "precache-manifest.8cd7b05e4ec076e64354b632a91eb31d.js": "/precache-manifest.8cd7b05e4ec076e64354b632a91eb31d.js",
     "service-worker.js": "/service-worker.js",
     "static/css/10.6b4cd3ba.chunk.css.map": "/static/css/10.6b4cd3ba.chunk.css.map",
     "static/css/5.758c8bbf.chunk.css.map": "/static/css/5.758c8bbf.chunk.css.map",
@@ -89,10 +89,10 @@
     "static/media/tipos_joelhos.jpg": "/static/media/tipos_joelhos.9a81eae9.jpg"
   },
   "entrypoints": [
-    "static/js/runtime-main.1978bf2c.js",
+    "static/js/runtime-main.5b1e36dc.js",
     "static/css/5.758c8bbf.chunk.css",
     "static/js/5.d5844b12.chunk.js",
     "static/css/main.acf42b31.chunk.css",
-    "static/js/main.c3e6a450.chunk.js"
+    "static/js/main.3ac175c8.chunk.js"
   ]
 }
