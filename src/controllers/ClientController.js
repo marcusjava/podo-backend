@@ -59,11 +59,16 @@ const update = async (req, res, next) => {
 	const { id } = req.params;
 	const { name, instagram, cpf, rg, email, address, occupation, contact, nasc, sex, etnia } = req.body;
 
+	let oldAvatar;
+
 	Client.findById(id)
 		.then((doc) => {
 			if (!doc) {
 				return res.status(404).json({ message: 'Cliente não localizado' });
 			}
+
+			oldAvatar = doc.avatar;
+
 			doc.avatar = typeof req.file === 'undefined' ? doc.avatar : req.file.key;
 			doc.name = name;
 			doc.instagram = instagram;
@@ -80,6 +85,10 @@ const update = async (req, res, next) => {
 			return doc.save();
 		})
 		.then((doc) => {
+			console.log(oldAvatar, doc.avatar);
+			// if(oldAvatar !== 'no-img.png' && doc.avatar !== 'no-img.png' && oldAvatar !== doc.avatar){
+
+			// }
 			return res.json(doc);
 		})
 		.catch((error) => {

@@ -275,3 +275,11 @@
 {"message":"::ffff:127.0.0.1 - - [04/Sep/2020:01:53:55 +0000] \"GET /inicio/principal HTTP/1.1\" 404 155 \"-\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0\"\n","level":"info"}
 {"message":"::ffff:127.0.0.1 - - [04/Sep/2020:01:54:05 +0000] \"GET /undefined HTTP/1.1\" 404 148 \"http://localhost:3001/\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0\"\n","level":"info"}
 {"message":"::ffff:127.0.0.1 - - [04/Sep/2020:01:54:48 +0000] \"GET /inicio/administrador/servico HTTP/1.1\" 404 167 \"-\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0\"\n","level":"info"}
+{"message":"13-09-2020T09:54:38-03:00 - 400 - Internal Error - Email já cadastrado  - /api/clients/register - POST - ::ffff:127.0.0.1","level":"error"}
+{"message":"::ffff:127.0.0.1 - - [13/Sep/2020:12:54:38 +0000] \"POST /api/clients/register HTTP/1.1\" 400 549 \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0\"\n","level":"info"}
+{"message":"13-09-2020T10:16:23-03:00 - 400 - Internal Error - CPF já cadastrado  - /api/clients/register - POST - ::ffff:127.0.0.1","level":"error"}
+{"message":"::ffff:127.0.0.1 - - [13/Sep/2020:13:16:23 +0000] \"POST /api/clients/register HTTP/1.1\" 400 920 \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0\"\n","level":"info"}
+{"message":"13-09-2020T10:24:51-03:00 - 400 - Internal Error - CPF já cadastrado  - /api/clients/register - POST - ::ffff:127.0.0.1","level":"error"}
+{"message":"::ffff:127.0.0.1 - - [13/Sep/2020:13:24:51 +0000] \"POST /api/clients/register HTTP/1.1\" 400 920 \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0\"\n","level":"info"}
+{"message":"13-09-2020T10:24:59-03:00 - 400 - Internal Error - Email já cadastrado  - /api/clients/register - POST - ::ffff:127.0.0.1","level":"error"}
+{"message":"::ffff:127.0.0.1 - - [13/Sep/2020:13:24:59 +0000] \"POST /api/clients/register HTTP/1.1\" 400 574 \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0\"\n","level":"info"}

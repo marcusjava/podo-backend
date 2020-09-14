@@ -3,12 +3,7 @@ const Client = require('../models/Client');
 const ConsultHistory = require('../models/ConsultHistory');
 const ValidateConsult = require('../validation/consult');
 
-const fs = require('fs');
-const path = require('path');
-const { promisify } = require('util');
-const aws = require('aws-sdk');
-
-const s3 = new aws.S3();
+const DeleteFile = require('../utils/DeleteFile');
 
 //TODO
 // Ver filtro de uma consulta com mesmo paciente
@@ -103,14 +98,7 @@ const deletePhoto = async (req, res, next) => {
 
 	Consult.findByIdAndUpdate({ _id: id }, { $pull: { photos: { _id: photo_id } } }, { new: true })
 		.then((doc) => {
-			if (process.env.STORAGE_TYPE === 's3') {
-				s3.deleteObject({
-					Bucket: 'podobucket',
-					Key: photo[0].key,
-				}).promise();
-			} else {
-				promisify(fs.unlink)(path.resolve(__dirname, '..', '..', 'uploads', photo[0].key));
-			}
+			DeleteFile(photo[0].key);
 
 			return res.status(200).json(doc);
 		})
@@ -157,12 +145,12 @@ const retrieve = async (req, res, next) => {
 };
 
 const list = async (req, res, next) => {
-	const { start, end, status, client, client_id } = req.query;
+	const { start, end, status, client, client_id, all } = req.query;
 
 	let condition = {};
 	let clients;
 
-	if (start !== undefined) {
+	if (!all) {
 		condition.date = {
 			$gte: new Date(new Date(Date.now()).setHours(00, 00, 00)),
 		};
