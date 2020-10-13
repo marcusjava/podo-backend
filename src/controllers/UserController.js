@@ -105,7 +105,7 @@ const register = async (req, res, next) => {
 			newUser.password = hash;
 			newUser
 				.save()
-				.then((user) => res.status(201).send({ msg: 'Usuario salvo com sucesso' }))
+				.then((user) => res.status(201).send(user))
 				.catch((error) => {
 					if (error.errors.cpf) {
 						return next({ status: 400, message: { path: 'cpf', message: 'CPF já cadastrado' } });
@@ -130,8 +130,6 @@ const update = async (req, res, next) => {
 		return next({ status: 400, message: errors });
 	}
 	const { id } = req.params;
-
-	console.log(req.body);
 
 	const { name, phone, nasc, cpf, rg, password, email, address, role, status } = req.body;
 

@@ -26,7 +26,7 @@ const create = async (req, res, next) => {
 
 	newClient
 		.save()
-		.then((response) => res.status(201).send('Cliente salvo com sucesso'))
+		.then((response) => res.status(201).json(response))
 		.catch((error) => {
 			const err = new Error();
 
@@ -85,9 +85,7 @@ const update = async (req, res, next) => {
 			return doc.save();
 		})
 		.then((doc) => {
-			console.log(oldAvatar, doc.avatar);
 			// if(oldAvatar !== 'no-img.png' && doc.avatar !== 'no-img.png' && oldAvatar !== doc.avatar){
-
 			// }
 			return res.json(doc);
 		})

@@ -17,8 +17,10 @@ const procedures = require('./routes/api/procedures');
 const services = require('./routes/api/services');
 const consults = require('./routes/api/consults');
 
+console.log(process.env.NODE_ENV);
+
 // URI mongodb atlas mongodb+srv://omnistack:omnistack@cluster0-kjbyd.mongodb.net/semana09?retryWrites=true&w=majority
-mongoose.connect(process.env.MONGO_URI_ATLAS, {
+mongoose.connect(process.env.NODE_ENV === 'development' ? process.env.MONGO_URI : process.env.MONGO_URI_ATLAS, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 	useCreateIndex: true,

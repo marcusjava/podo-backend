@@ -43,14 +43,6 @@ const create = async (req, res, next) => {
 	}
 };
 
-/**
- *
- * @param {id} req
- * @param {*} res
- *
- * TODO
- * - Verificar se ao atualizar a consulta SE NAO EXSITE UMA OUTRA NO MESMO HORARIO
- */
 
 const update = async (req, res, next) => {
 	const { errors, isValid } = ValidateConsult(req.body);

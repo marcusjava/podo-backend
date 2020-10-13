@@ -18,25 +18,20 @@ const create = async (req, res, next) => {
 		return next({ status: 400, message: { path: 'name', message: 'Procedimento ja cadastrado' } });
 	}
 
-	let newProcedure;
+	const newProcedure = new Procedure({
+		service,
+		name,
+		description,
+		createdBy: req.user,
+	});
 
-	try {
-		newProcedure = await Procedure.create({
-			service,
-			name,
-			description,
-			createdBy: req.user,
-		});
-	} catch (error) {
-		return next({ status: 400, message: error });
-	}
-
-	return res.status(201).json(newProcedure);
+	newProcedure
+		.save()
+		.then((response) => res.status(201).json(response))
+		.catch((error) => next({ status: 400, message: error }));
 };
 
 const update = async (req, res, next) => {
-	//const { errors, isValid} = ValidateProcedure(req.body)
-
 	const { service, name, description } = req.body;
 	const { id } = req.params;
 
@@ -58,9 +53,9 @@ const update = async (req, res, next) => {
 			doc.description = description;
 			doc.updatedBy = req.user;
 
-			doc.save();
-			return res.json(doc);
+			return doc.save();
 		})
+		.then((doc) => res.json(doc))
 		.catch((error) =>
 			next({ status: 400, message: { message: ' Ocorreu um erro ao tentar atualizar o procedimento', error } })
 		);
