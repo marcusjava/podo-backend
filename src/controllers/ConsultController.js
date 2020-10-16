@@ -43,7 +43,6 @@ const create = async (req, res, next) => {
 	}
 };
 
-
 const update = async (req, res, next) => {
 	const { errors, isValid } = ValidateConsult(req.body);
 
@@ -113,7 +112,7 @@ const savePhotos = async (req, res, next) => {
 		size: file.size,
 		key: file.key,
 		url:
-			process.env.STORAGE_TYPE === 'local'
+			process.env.NODE_ENV === 'development'
 				? `http://localhost:3001/files/${file.key}`
 				: `https://podobucket.s3.us-east-2.amazonaws.com/${file.key}`,
 	}));

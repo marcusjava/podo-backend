@@ -11,8 +11,8 @@ const storageTypes = {
 			cb(null, path.resolve(__dirname, '..', '..', 'uploads'));
 		},
 		filename: (req, file, cb) => {
-			const ext = path.extname(file.originalname);
-			const name = path.basename(file.originalname, ext);
+			const ext = path.extname(file.fieldname);
+			const name = path.basename(file.fieldname, ext);
 
 			file.key = `${name}-${Date.now()}${ext}`;
 
@@ -25,10 +25,11 @@ const storageTypes = {
 		contentType: s3Storage.AUTO_CONTENT_TYPE,
 		ACL: 'public-read',
 		key: (req, file, cb) => {
-			//gerando hash para anexar ao nome do arquivo
-			const ext = path.extname(file.originalname);
-			const name = path.basename(file.originalname, ext);
+			const ext = path.extname(file.fieldname);
+			const name = path.basename(file.fieldname, ext);
+
 			file.key = `${name}-${Date.now()}${ext}`;
+
 			cb(null, file.key);
 		},
 	}),
@@ -42,7 +43,7 @@ const storageTypes = {
 
 module.exports = {
 	dest: path.resolve(__dirname, '..', '..', 'uploads'),
-	storage: storageTypes[process.env.STORAGE_TYPE],
+	storage: storageTypes[process.env.NODE_ENV === 'production' ? 's3' : 'local'],
 	//limits: { fileSize: 2 * 1024 * 1024 },
 	fileFilter: (req, file, cb) => {
 		const allowedMimeTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/gif'];

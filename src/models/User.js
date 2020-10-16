@@ -56,7 +56,7 @@ const UserSchema = mongoose.Schema(
 );
 
 UserSchema.virtual('avatar_url').get(function () {
-	return process.env.STORAGE_TYPE == 'local'
+	return process.env.NODE_ENV == 'development'
 		? `http://localhost:3001/files/${this.thumbnail}`
 		: `https://podobucket.s3.us-east-2.amazonaws.com/${this.thumbnail}`;
 });

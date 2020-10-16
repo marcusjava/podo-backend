@@ -66,7 +66,7 @@ const ClientSchema = new mongoose.Schema(
 );
 
 ClientSchema.virtual('avatar_url').get(function () {
-	return process.env.STORAGE_TYPE == 's3'
+	return process.env.NODE_ENV === 'production'
 		? `https://podobucket.s3.us-east-2.amazonaws.com/${this.avatar}`
 		: `http://localhost:3001/files/${this.avatar}`;
 });
