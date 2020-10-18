@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-const mongooseHistory = require('mongoose-history');
-
 const mongoose_populate = require('mongoose-autopopulate');
 
 const ProcedureSchema = mongoose.Schema(
@@ -36,8 +34,6 @@ const ProcedureSchema = mongoose.Schema(
 		timestamps: true,
 	}
 );
-
-ProcedureSchema.plugin(mongooseHistory);
 
 ProcedureSchema.plugin(mongoose_populate);
 

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const mongooseHistory = require('mongoose-history');
 const uniqueValidator = require('mongoose-unique-validator');
 
 const UserSchema = mongoose.Schema(
@@ -60,8 +59,6 @@ UserSchema.virtual('avatar_url').get(function () {
 		? `http://localhost:3001/files/${this.thumbnail}`
 		: `https://podobucket.s3.us-east-2.amazonaws.com/${this.thumbnail}`;
 });
-
-UserSchema.plugin(mongooseHistory);
 
 UserSchema.plugin(uniqueValidator);
 

@@ -131,7 +131,7 @@ const list = async (req, res) => {
 		condition.contact = { $regex: contact, $options: 'i' };
 	}
 
-	list = await Client.find(condition).sort({ createdAt: -1 }).limit(500);
+	list = await Client.find(condition).sort({ createdAt: -1 }).limit(200);
 
 	return res.json(list);
 };
