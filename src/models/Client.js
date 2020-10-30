@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const mongooseHistory = require('mongoose-history');
 const mongoose_populate = require('mongoose-autopopulate');
-const uniqueValidator = require('mongoose-unique-validator');
 
 const ClientSchema = new mongoose.Schema(
 	{
@@ -13,13 +12,10 @@ const ClientSchema = new mongoose.Schema(
 		instagram: {
 			type: String,
 		},
-		cpf: { type: String, unique: true },
+		cpf: { type: String, required: true },
 		rg: { type: String },
 		email: {
 			type: String,
-			unique: true,
-			trim: true,
-			match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
 		},
 		address: {
 			street: { type: String },
@@ -72,8 +68,6 @@ ClientSchema.virtual('avatar_url').get(function () {
 });
 
 ClientSchema.plugin(mongooseHistory);
-
-ClientSchema.plugin(uniqueValidator, { '{PATH}': 'Erro, já existe {PATH} cadastrado no sistema.' });
 
 ClientSchema.plugin(mongoose_populate);
 

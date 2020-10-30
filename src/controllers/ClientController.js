@@ -1,5 +1,6 @@
 const Client = require('../models/Client');
 const ValidateClient = require('../validation/client');
+const ValidateCPF = require('../utils/ValidateCPF');
 
 const create = async (req, res, next) => {
 	const { errors, isValid } = ValidateClient(req.body);
@@ -8,6 +9,22 @@ const create = async (req, res, next) => {
 		return next({ status: 400, message: errors });
 	}
 	const { name, instagram, cpf, rg, email, address, occupation, contact, nasc, sex, etnia } = req.body;
+
+	const cpfExists = await Client.findOne({ cpf });
+
+	if (cpfExists != null) {
+		return next({ status: 500, message: { path: 'cpf', message: 'CPF já cadastrado' } });
+	}
+
+	//Validando o cpf somente em producao
+
+	if (process.env.NODE_ENV === 'production') {
+		const validCPF = ValidateCPF(cpf);
+		if (!validCPF) {
+			return next({ status: 500, message: { path: 'cpf', message: 'CPF invalido' } });
+		}
+	}
+
 	const newClient = new Client({
 		avatar: typeof req.file === 'undefined' ? 'no-img.png' : req.file.key,
 		name,
@@ -28,20 +45,12 @@ const create = async (req, res, next) => {
 		.save()
 		.then((response) => res.status(201).json(response))
 		.catch((error) => {
-			const err = new Error();
-
-			if (error.errors.cpf) {
-				err.status = 400;
-				err.message = { path: 'cpf', message: 'CPF já cadastrado', error: error };
-			} else if (error.errors.email) {
-				err.status = 400;
-				err.message = { path: 'email', message: 'Email já cadastrado', error: error };
-			} else {
-				err.status = 400;
-				err.message = { path: 'general', message: 'Ocorreu um error ao salvar o usuario', error: error };
-			}
-
-			return next(err);
+			console.error(error);
+			return next({
+				status: 400,
+				message: { path: 'general', message: 'Ocorreu um error ao salvar o usuario' },
+				error,
+			});
 		});
 };
 
