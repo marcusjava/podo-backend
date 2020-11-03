@@ -1291,3 +1291,13 @@
 {"message":"::ffff:127.0.0.1 - - [30/Oct/2020:18:12:38 +0000] \"POST /api/clients/register HTTP/1.1\" 400 67 \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:81.0) Gecko/20100101 Firefox/81.0\"\n","level":"info"}
 {"message":"30-10-2020T15:48:57-03:00 - 500 - Internal Error - CPF já cadastrado  - /api/clients/register - POST - ::ffff:127.0.0.1","level":"error"}
 {"message":"::ffff:127.0.0.1 - - [30/Oct/2020:18:48:57 +0000] \"POST /api/clients/register HTTP/1.1\" 500 45 \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:81.0) Gecko/20100101 Firefox/81.0\"\n","level":"info"}
+{"message":"02-11-2020T18:07:52-03:00 - 500 - Internal Error - CPF já cadastrado  - /api/clients/register - POST - ::ffff:127.0.0.1","level":"error"}
+{"message":"::ffff:127.0.0.1 - - [02/Nov/2020:21:07:52 +0000] \"POST /api/clients/register HTTP/1.1\" 500 45 \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:81.0) Gecko/20100101 Firefox/81.0\"\n","level":"info"}
+{"message":"02-11-2020T18:10:11-03:00 - 500 - Internal Error - CPF já cadastrado  - /api/clients/register - POST - ::ffff:127.0.0.1","level":"error"}
+{"message":"::ffff:127.0.0.1 - - [02/Nov/2020:21:10:11 +0000] \"POST /api/clients/register HTTP/1.1\" 500 45 \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:81.0) Gecko/20100101 Firefox/81.0\"\n","level":"info"}
+{"message":"02-11-2020T18:11:49-03:00 - 500 - Internal Error - CPF já cadastrado  - /api/clients/register - POST - ::ffff:127.0.0.1","level":"error"}
+{"message":"::ffff:127.0.0.1 - - [02/Nov/2020:21:11:49 +0000] \"POST /api/clients/register HTTP/1.1\" 500 45 \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:81.0) Gecko/20100101 Firefox/81.0\"\n","level":"info"}
+{"message":"02-11-2020T18:16:03-03:00 - 500 - Internal Error - CPF já cadastrado  - /api/clients/register - POST - ::ffff:127.0.0.1","level":"error"}
+{"message":"::ffff:127.0.0.1 - - [02/Nov/2020:21:16:03 +0000] \"POST /api/clients/register HTTP/1.1\" 500 45 \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:81.0) Gecko/20100101 Firefox/81.0\"\n","level":"info"}
+{"message":"02-11-2020T18:24:11-03:00 - 500 - Internal Error - CPF já cadastrado  - /api/clients/register - POST - ::ffff:127.0.0.1","level":"error"}
+{"message":"::ffff:127.0.0.1 - - [02/Nov/2020:21:24:11 +0000] \"POST /api/clients/register HTTP/1.1\" 500 45 \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:81.0) Gecko/20100101 Firefox/81.0\"\n","level":"info"}
