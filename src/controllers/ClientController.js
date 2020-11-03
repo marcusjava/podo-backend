@@ -38,7 +38,6 @@ const create = async (req, res, next) => {
 		.save()
 		.then((response) => res.status(201).json(response))
 		.catch((error) => {
-			console.error(error);
 			return next({
 				status: 400,
 				message: { path: 'general', message: 'Ocorreu um error ao salvar o usuario' },
