@@ -18,13 +18,6 @@ const create = async (req, res, next) => {
 
 	//Validando o cpf somente em producao
 
-	if (process.env.NODE_ENV === 'production') {
-		const validCPF = ValidateCPF(cpf);
-		if (!validCPF) {
-			return next({ status: 500, message: { path: 'cpf', message: 'CPF invalido' } });
-		}
-	}
-
 	const newClient = new Client({
 		avatar: typeof req.file === 'undefined' ? 'no-img.png' : req.file.key,
 		name,
