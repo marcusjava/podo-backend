@@ -10,7 +10,7 @@ const create = async (req, res, next) => {
 		return next({ status: 400, message: errors });
 	}
 
-	const { service, name, description } = req.body;
+	const { service, name, price, description } = req.body;
 
 	const procedure = await Procedure.findOne({ name });
 
@@ -21,6 +21,7 @@ const create = async (req, res, next) => {
 	const newProcedure = new Procedure({
 		service,
 		name,
+		price,
 		description,
 		createdBy: req.user,
 	});
@@ -32,7 +33,7 @@ const create = async (req, res, next) => {
 };
 
 const update = async (req, res, next) => {
-	const { service, name, description } = req.body;
+	const { service, name, price, description } = req.body;
 	const { id } = req.params;
 
 	if (!service) {
@@ -51,6 +52,7 @@ const update = async (req, res, next) => {
 			doc.service = service;
 			doc.name = name;
 			doc.description = description;
+			doc.price = price;
 			doc.updatedBy = req.user;
 
 			return doc.save();

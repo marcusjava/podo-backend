@@ -16,6 +16,9 @@ const ProcedureSchema = mongoose.Schema(
 		description: {
 			type: String,
 		},
+		price: {
+			type: String,
+		},
 		createdBy: {
 			type: mongoose.Types.ObjectId,
 			ref: 'User',

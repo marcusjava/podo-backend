@@ -5,7 +5,6 @@ module.exports = (data) => {
 	let errors = {};
 
 	data.service = !isEmpty(data.service) ? data.service : '';
-	data.name = !isEmpty(data.name) ? data.name : '';
 	data.description = !isEmpty(data.description) ? data.description : '';
 
 	if (Validator.isEmpty(data.service)) {
@@ -14,10 +13,6 @@ module.exports = (data) => {
 
 	if (Validator.isEmpty(data.name)) {
 		errors = { path: 'name', message: 'Informe o nome do procedimento' };
-	}
-
-	if (Validator.isEmpty(data.description)) {
-		errors = { path: 'description', message: 'Informe a descrição do procedimento' };
 	}
 
 	return {
