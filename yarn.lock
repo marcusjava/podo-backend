@@ -3274,9 +3274,9 @@ supports-color@^7.1.0:
     has-flag "^4.0.0"
 
 systeminformation@^4.23.3:
-  version "4.26.0"
-  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-4.26.0.tgz#02ebf1fcb6e0bcb2f1e1a3f6a1ad64f4ce37b999"
-  integrity sha512-1VtMfcmEda62IlkHIOH22am3IT9MFcBkBisNQh2+CzX3gDie1REZB1U5705ZCKekqRueYBQvsCV9bGpP/3unfw==
+  version "4.30.6"
+  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-4.30.6.tgz#b56074968f2ea28ac118f23221c449b0f763db22"
+  integrity sha512-NV7zo9NU7fWSuiCORZmMLe90cFrrTS6jfalrQ0/5B7JGQ2ei15c2gmfICBwWdmviyv/FXAFVReySxOtDDkppqw==
 
 tar-fs@^2.0.0:
   version "2.1.0"
