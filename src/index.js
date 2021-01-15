@@ -50,6 +50,10 @@ app.use(
 
 // Routes
 
+app.get("/api", (req, res) => {
+  return res.send("Backend started!!!");
+});
+
 app.use("/api/users", users);
 app.use("/api/clients", clients);
 app.use("/api/procedures", procedures);
