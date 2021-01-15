@@ -19,6 +19,8 @@ const consults = require("./routes/api/consults");
 
 // URI mongodb atlas mongodb+srv://omnistack:omnistack@cluster0-kjbyd.mongodb.net/semana09?retryWrites=true&w=majority
 //process.env.NODE_ENV === 'development' ? process.env.MONGO_URI : process.env.MONGO_URI_ATLAS
+
+//mongo config
 mongoose.connect(process.env.MONGO_URI_ATLAS, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -86,7 +88,7 @@ app.use(
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.resolve(__dirname, "..", "client", "build")));
-  app.get("/app", (req, res) => {
+  app.get("/", (req, res) => {
     res.sendFile(
       path.resolve(__dirname, "..", "client", "build", "index.html")
     );
