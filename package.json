@@ -1,6 +1,9 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  "engines": {
+    "node": "14.15.4"
+  },
   "main": "src/index.js",
   "license": "MIT",
   "scripts": {
@@ -10,8 +13,8 @@
     "prestart": "npm i"
   },
   "dependencies": {
-    "@sentry/node": "5.15.5",
-    "@synapsestudios/winston-sentry": "^1.1.0",
+    "@sentry/node": "5.30.0",
+    "@synapsestudios/winston-sentry": "^2.1.0",
     "async": "^2.0.0",
     "aws-sdk": "^2.681.0",
     "axios": "^0.21.1",
